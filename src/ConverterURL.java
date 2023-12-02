@@ -1,5 +1,3 @@
-package HTTP;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -10,11 +8,7 @@ public class ConverterURL {
 
     public ConverterURL (String query) {
         this.query=query;
-        try {
-            this.encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        this.encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
     }
 
     public String getQuery() {

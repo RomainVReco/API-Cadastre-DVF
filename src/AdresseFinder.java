@@ -1,13 +1,10 @@
-package HTTP;
-
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AdresseFinder {
 
-    static final String PATH = "/Users/coding/Documents/Java/";
+    static final String PATH = "Ressources\\";
     static final String URL = "https://api-adresse.data.gouv.fr/search/?q=";
     URL url;
     HttpsURLConnection conn;
