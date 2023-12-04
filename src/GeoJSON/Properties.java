@@ -1,21 +1,37 @@
 package GeoJSON;
 
-public class Properties {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public class Properties {
+        @JsonProperty("label")
         private String label;
+        @JsonProperty("score")
         private double score;
+        @JsonProperty("housenumber")
         private String housenumber;
+        @JsonProperty("id")
         private String id;
+        @JsonProperty("name")
         private String name;
+        @JsonProperty("postcode")
         private String postcode;
+        @JsonProperty("citycode")
         private String citycode;
+        @JsonProperty("x")
         private double x;
+        @JsonProperty("y")
         private double y;
+        @JsonProperty("city")
         private String city;
+        @JsonProperty("district")
         private String district;
+        @JsonProperty("context")
         private String context;
-        private String propertyType; // Change the name to avoid conflicts with the reserved keyword "type"
+        @JsonProperty("type")
+        private String propertyType;
+        @JsonProperty("importance")
         private double importance;
+        @JsonProperty("street")
         private String street;
 
     public String getLabel() {

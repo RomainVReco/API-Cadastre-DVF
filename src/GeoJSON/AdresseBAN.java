@@ -2,31 +2,32 @@ package GeoJSON;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 /*
 * Objet utilisé pour la récupération d'une FeatureCollection de l'API Adresse
 * */
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class AdresseBAN {
+    @JsonProperty("type")
     String type;
+    @JsonProperty("version")
     String version;
-    List<Feature> feature;
+    @JsonProperty("features")
+    List<Feature> features;
     String attribution;
     String licence;
     String query;
     int limit;
 
-    public AdresseBAN() {
+    public List<Feature> getFeatures() {
+        return features;
     }
 
-    public List<Feature> getFeature() {
-        return feature;
-    }
-
-    public void setFeature(List<Feature> feature) {
-        this.feature = feature;
+    public void setFeatures(List<Feature> feature) {
+        this.features = feature;
     }
 
     public String getAttribution() {
@@ -66,7 +67,7 @@ public class AdresseBAN {
         return "AdresseBAN{" +
                 "type='" + type + '\'' +
                 ", version='" + version + '\'' +
-                ", feature=" + feature +
+                ", features=" + features +
                 ", attribution='" + attribution + '\'' +
                 ", licence='" + licence + '\'' +
                 ", query='" + query + '\'' +
