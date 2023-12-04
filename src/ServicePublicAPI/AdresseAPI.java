@@ -1,21 +1,22 @@
+package ServicePublicAPI;
+
 import javax.net.ssl.HttpsURLConnection;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class FeuillePCIEXPRESS extends AbstractRequestAPI {
-    final String URL_API = "https://apicarto.ign.fr/api/cadastre/feuille?geom=";
+public class AdresseAPI extends AbstractRequestAPI {
+
+    final String URL_API = "https://api-adresse.data.gouv.fr/search/?q=";
     URL URL;
-    String parameters;
-    public FeuillePCIEXPRESS(String query, String parameters) throws IOException, URISyntaxException {
-        this.parameters = parameters;
+
+    public AdresseAPI(String query) throws IOException, URISyntaxException {
         String encodedQuery = new ConverterURL(query).getEncodedQuery();
         URL = new URI(URL_API+encodedQuery).toURL();
         this.conn = this.getRequestResult(this.URL);
         System.out.println("Response code: " + conn.getResponseCode());
         System.out.println("conn : "+conn.getResponseMessage());
     }
-
 
 }

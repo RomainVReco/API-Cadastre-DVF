@@ -1,24 +1,25 @@
+package ServicePublicAPI;
+
+import Config.Config;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 
-public class AdresseFinder extends AbstractRequestAPI {
+public abstract class AbstractRequestAPI {
+    Config config;
 
-    final String URL_API = "https://api-adresse.data.gouv.fr/search/?q=";
-    URL URL;
+    HttpsURLConnection conn;
 
-    public AdresseFinder(String query) throws IOException, URISyntaxException {
-        String encodedQuery = new ConverterURL(query).getEncodedQuery();
-        URL = new URI(URL_API+encodedQuery).toURL();
-        this.conn = this.getRequestResult(this.URL);
-        System.out.println("Response code: " + conn.getResponseCode());
-        System.out.println("conn : "+conn.getResponseMessage());
+    public AbstractRequestAPI() {
+
     }
 
-
-    public HttpsURLConnection getConn() {
+    protected HttpsURLConnection getRequestResult(URL url) throws IOException {
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setDoOutput(true);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
         return conn;
     }
 
@@ -31,13 +32,14 @@ public class AdresseFinder extends AbstractRequestAPI {
                 str.append(line);
             }
         } catch (IOException e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return str.toString();
     }
 
     public boolean createJSONFile(String nomFichier, String contenuJson){
-        File file = new File(this.getPATH()+nomFichier+".json");
+        String PATH = Config.getInstance().givePath();
+        File file = new File(PATH+nomFichier+".json");
         FileWriter fw;
 
         try {
@@ -50,6 +52,15 @@ public class AdresseFinder extends AbstractRequestAPI {
             return false;
         }
         return true;
+    }
+
+
+    public HttpsURLConnection getConn() {
+        return conn;
+    }
+
+    public void setConn(HttpsURLConnection conn) {
+        this.conn = conn;
     }
 
 }
