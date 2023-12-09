@@ -1,7 +1,6 @@
-package GeoJSON;
+package org.immo.geojson.adresseban;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -16,18 +15,18 @@ public class AdresseBAN {
     @JsonProperty("version")
     String version;
     @JsonProperty("features")
-    List<Feature> features;
+    List<FeatureAdresseBAN> featureAdresseBAN;
     String attribution;
     String licence;
     String query;
     int limit;
 
-    public List<Feature> getFeatures() {
-        return features;
+    public List<FeatureAdresseBAN> getFeatures() {
+        return featureAdresseBAN;
     }
 
-    public void setFeatures(List<Feature> feature) {
-        this.features = feature;
+    public void setFeatures(List<FeatureAdresseBAN> featureAdresseBAN) {
+        this.featureAdresseBAN = featureAdresseBAN;
     }
 
     public String getAttribution() {
@@ -67,7 +66,7 @@ public class AdresseBAN {
         return "AdresseBAN{" +
                 "type='" + type + '\'' +
                 ", version='" + version + '\'' +
-                ", features=" + features +
+                ", features=" + featureAdresseBAN +
                 ", attribution='" + attribution + '\'' +
                 ", licence='" + licence + '\'' +
                 ", query='" + query + '\'' +

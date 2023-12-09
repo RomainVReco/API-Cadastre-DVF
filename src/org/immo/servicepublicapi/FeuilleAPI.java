@@ -1,4 +1,4 @@
-package ServicePublicAPI;
+package org.immo.servicepublicapi;
 
 import java.io.IOException;
 import java.net.URI;
@@ -8,6 +8,10 @@ import java.net.URL;
 public class FeuilleAPI extends AbstractRequestAPI {
     final String URL_API = "https://apicarto.ign.fr/api/cadastre/feuille?";
     URL URL;
+
+    /**
+     * Pour geom, le format attendu est {"type":"Point","coordinates":[2.247021,48.822554]}
+     */
     String parameters;
     public FeuilleAPI(String query, String parameters) throws IOException, URISyntaxException {
         this.parameters = parameters;

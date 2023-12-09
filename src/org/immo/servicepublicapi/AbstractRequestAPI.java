@@ -1,6 +1,6 @@
-package ServicePublicAPI;
+package org.immo.servicepublicapi;
 
-import Config.Config;
+import org.immo.config.Config;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;

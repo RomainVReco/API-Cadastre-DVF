@@ -1,8 +1,11 @@
-package GeoJSON;
+package org.immo.geojson.adresseban;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Properties {
+/**
+ * Classe encapsulée dans AdresseAPI afin d'obtenir les détail d'une adresse
+ */
+public class AdressProperties {
         @JsonProperty("label")
         private String label;
         @JsonProperty("score")
@@ -11,6 +14,8 @@ public class Properties {
         private String housenumber;
         @JsonProperty("id")
         private String id;
+        @JsonProperty("banId")
+        private String banId;
         @JsonProperty("name")
         private String name;
         @JsonProperty("postcode")

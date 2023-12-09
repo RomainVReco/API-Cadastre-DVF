@@ -1,11 +1,11 @@
-package GeoJSON;
+package org.immo.geojson.adresseban;
 
-import java.util.HashMap;
+import org.immo.geojson.Geometry;
 
-public class Feature {
+public class FeatureAdresseBAN {
     String type;
     Geometry geometry;
-    Properties properties;
+    AdressProperties properties;
 
     public String getType() {
         return type;
@@ -19,11 +19,11 @@ public class Feature {
         this.geometry = geometry;
     }
 
-    public Properties getProperties() {
+    public AdressProperties getProperties() {
         return properties;
     }
 
-    public void setProperties(Properties properties) {
+    public void setProperties(AdressProperties properties) {
         this.properties = properties;
     }
 

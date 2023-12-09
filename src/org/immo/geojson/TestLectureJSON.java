@@ -1,6 +1,6 @@
-package GeoJSON;
+package org.immo.geojson;
 
-import GeoJSON.Feature;
+import org.immo.geojson.adresseban.AdresseBAN;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;

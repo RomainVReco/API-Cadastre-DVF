@@ -1,9 +1,10 @@
 package TestJackson;
 
-import GeoJSON.AdresseBAN;
-import ServicePublicAPI.AdresseAPI;
+import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.servicepublicapi.AdresseAPI;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.immo.servicepublicapi.ParcelleAPI;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,8 +23,8 @@ public class MainJackson {
 //        byte[] otherData = Files.readAllBytes(Paths.get("Ressources/Issy2.json"));
 //        ObjectMapper otherMapper = new ObjectMapper();
 //        AdresseBAN ab = otherMapper.readValue(otherData, AdresseBAN.class);
-        String query = "31 avenue du bas meudon";
-        AdresseAPI adresse = new AdresseAPI(query);
+        String queryAdresse = "31 avenue du Bas meudon";
+        AdresseAPI adresse = new AdresseAPI(queryAdresse);
 
         String jsonResponse = adresse.readReponseFromAPI(adresse.getConn());
 
@@ -34,10 +35,15 @@ public class MainJackson {
         System.out.println(jsonNode.toString());
 
         ObjectMapper newMapper = new ObjectMapper();
-        AdresseBAN ader = newMapper.readValue(jsonResponse, AdresseBAN.class);
+        AdresseBAN ader = anotherMapper.readValue(jsonResponse, AdresseBAN.class);
         System.out.println(ader.getFeatures().get(0).getGeometry().toString());
         System.out.println(ader.getFeatures().get(0).getGeometry().getCoordinates());
         System.out.println(getOperatingSystem());
+
+//        String queryParcelle = "{\"type\": \"Point\",\"coordinates\": [2.32557,48.830378]}";
+//        ParcelleAPI parcelleAPI = new ParcelleAPI(queryParcelle, "geom");
+//        String jsonParcelle = parcelleAPI.readReponseFromAPI(parcelleAPI.getConn());
+//        JsonNode jsonNodeParcelle =
 
 
 

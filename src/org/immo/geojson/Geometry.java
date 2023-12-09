@@ -1,4 +1,4 @@
-package GeoJSON;
+package org.immo.geojson;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

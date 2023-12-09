@@ -1,4 +1,4 @@
-package ServicePublicAPI;
+package org.immo.servicepublicapi;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

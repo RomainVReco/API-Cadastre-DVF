@@ -1,6 +1,5 @@
-package ServicePublicAPI;
+package org.immo.servicepublicapi;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;

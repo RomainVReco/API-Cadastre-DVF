@@ -1,4 +1,4 @@
-package Config;
+package org.immo.config;
 
 public final class Config {
     private static Config config;
