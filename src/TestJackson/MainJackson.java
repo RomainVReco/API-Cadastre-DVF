@@ -43,6 +43,7 @@ public class MainJackson {
 
         System.out.println(" ");
 
+        // 202 avenue du Maine
         String queryParcelle = "{\"type\": \"Point\",\"coordinates\": [2.32557,48.830378]}";
         ParcelleAPI parcelleAPI = new ParcelleAPI(queryParcelle, "geom");
         String jsonParcelle = parcelleAPI.readReponseFromAPI(parcelleAPI.getConn());
@@ -53,10 +54,6 @@ public class MainJackson {
         Parcelle parcelle = anotherMapper.readValue(jsonParcelle, Parcelle.class);
         System.out.println(parcelle.getBbox().toString());
         System.out.println(parcelle.getFeaturesParcelle().get(0).getParcelleProperties().toString());
-
-
-
-
     }
 
     public static String getOperatingSystem() {
