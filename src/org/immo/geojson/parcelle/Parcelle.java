@@ -70,6 +70,14 @@ public class Parcelle {
         return bbox;
     }
 
+    public String convertBboxToString(){
+        StringBuilder bbox = new StringBuilder();
+        for (Double point: this.getBbox()) {
+            bbox.append(point).append(",");
+        }
+        return bbox.substring(0, bbox.length()-1);
+    }
+
     public void setBbox(List<Double> bbox) {
         this.bbox = bbox;
     }

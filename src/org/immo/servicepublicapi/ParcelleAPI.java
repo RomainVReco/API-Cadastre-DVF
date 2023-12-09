@@ -3,10 +3,11 @@ package org.immo.servicepublicapi;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 public class ParcelleAPI extends AbstractRequestAPI{
     final String URL_API = "https://apicarto.ign.fr/api/cadastre/parcelle?";
-    java.net.URL URL;
+    URL URL;
     String parameters;
     public ParcelleAPI(String query, String parameters) throws IOException, URISyntaxException {
         this.parameters = parameters;
