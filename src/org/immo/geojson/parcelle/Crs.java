@@ -1,7 +1,10 @@
 package org.immo.geojson.parcelle;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Crs {
     private String type;
+    @JsonProperty("properties")
     private CrsProperties crsProperties;
 
     public String getType() {

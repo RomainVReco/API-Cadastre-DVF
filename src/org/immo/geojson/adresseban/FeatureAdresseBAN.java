@@ -1,21 +1,21 @@
 package org.immo.geojson.adresseban;
 
-import org.immo.geojson.Geometry;
+import org.immo.geojson.geometry.GeometryPoint;
 
 public class FeatureAdresseBAN {
     String type;
-    Geometry geometry;
+    GeometryPoint geometry;
     AdressProperties properties;
 
     public String getType() {
         return type;
     }
 
-    public Geometry getGeometry() {
+    public GeometryPoint getGeometry() {
         return geometry;
     }
 
-    public void setGeometry(Geometry geometry) {
+    public void setGeometry(GeometryPoint geometry) {
         this.geometry = geometry;
     }
 

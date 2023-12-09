@@ -52,7 +52,7 @@ public class MainJackson {
 
         Parcelle parcelle = anotherMapper.readValue(jsonParcelle, Parcelle.class);
         System.out.println(parcelle.getBbox().toString());
-        System.out.println(parcelle.getFeaturesParcelle().get(4).getParcelleProperties().toString());
+        System.out.println(parcelle.getFeaturesParcelle().get(0).getParcelleProperties().toString());
 
 
 

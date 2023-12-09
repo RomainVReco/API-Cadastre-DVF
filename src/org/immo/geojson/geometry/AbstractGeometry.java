@@ -1,14 +1,12 @@
-package org.immo.geojson;
+package org.immo.geojson.geometry;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
 
 public class AbstractGeometry<T> {
     @JsonProperty("type")
     String type;
     @JsonProperty("coordinates")
-    List<T> coordinates;
+    T coordinates;
 
     public String getType() {
         return type;
@@ -18,11 +16,11 @@ public class AbstractGeometry<T> {
         this.type = type;
     }
 
-    public List<T> getCoordinates() {
+    public T getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<T> coordinates) {
+    public void setCoordinates(T coordinates) {
         this.coordinates = coordinates;
     }
 

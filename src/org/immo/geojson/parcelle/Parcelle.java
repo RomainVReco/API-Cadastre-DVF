@@ -11,6 +11,8 @@ public class Parcelle {
     private List<FeatureParcelle> featuresParcelle;
     private int totalFeatures;
     private int numberMatched;
+    @JsonProperty("numberReturned")
+    private int numberReturned;
     private String timeStamp;
     private Crs crs ;
     @JsonProperty("bbox")
