@@ -15,7 +15,6 @@ public class ParcelleAPI extends AbstractRequestAPI{
         URL = new URI(URL_API+preparedParameter+encodedQuery).toURL();
         this.conn = this.getRequestResult(this.URL);
         System.out.println("Response code: " + conn.getResponseCode());
-        System.out.println("conn : "+conn.getResponseMessage());
     }
 
 }

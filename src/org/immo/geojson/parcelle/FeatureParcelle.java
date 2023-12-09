@@ -1,5 +1,6 @@
 package org.immo.geojson.parcelle;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.immo.geojson.Geometry;
 
 public class FeatureParcelle {
@@ -7,6 +8,7 @@ public class FeatureParcelle {
     private String id;
     private Geometry geometry;
     private String geometryName;
+    @JsonProperty("properties")
     private ParcelleProperties parcelleProperties;
 
     public String getType() {

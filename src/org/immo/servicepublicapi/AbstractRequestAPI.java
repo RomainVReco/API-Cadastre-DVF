@@ -28,7 +28,6 @@ public abstract class AbstractRequestAPI {
         try (BufferedReader bf = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
             String line;
             while ((line = bf.readLine()) != null) {
-                System.out.println(line);
                 str.append(line);
             }
         } catch (IOException e) {

@@ -25,6 +25,24 @@ public class ParcelleProperties {
     @JsonProperty("bbox")
     private List<Double> bbox;
 
+    @Override
+    public String toString() {
+        return "ParcelleProperties{" +
+                "numero='" + numero + '\'' +
+                ", feuille=" + feuille +
+                ", section='" + section + '\'' +
+                ", codeDep='" + codeDep + '\'' +
+                ", nomCommune='" + nomCommune + '\'' +
+                ", codeCommune='" + codeCommune + '\'' +
+                ", comAbs='" + comAbs + '\'' +
+                ", codeArr='" + codeArr + '\'' +
+                ", idu='" + idu + '\'' +
+                ", codeInsee='" + codeInsee + '\'' +
+                ", contenance='" + contenance + '\'' +
+                ", bbox=" + bbox +
+                '}';
+    }
+
     public String getNumero() {
         return numero;
     }

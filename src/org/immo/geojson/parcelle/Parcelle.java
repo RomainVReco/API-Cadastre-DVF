@@ -1,15 +1,19 @@
 package org.immo.geojson.parcelle;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 public class Parcelle {
     private String type;
+    @JsonProperty("features")
     private List<FeatureParcelle> featuresParcelle;
     private int totalFeatures;
     private int numberMatched;
     private String timeStamp;
     private Crs crs ;
+    @JsonProperty("bbox")
     private List<Double> bbox ;
 
     public String getType() {

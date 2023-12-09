@@ -1,9 +1,11 @@
 package TestJackson;
 
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.parcelle.Parcelle;
 import org.immo.servicepublicapi.AdresseAPI;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.immo.servicepublicapi.FeuilleAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 
 import java.io.IOException;
@@ -38,12 +40,19 @@ public class MainJackson {
         AdresseBAN ader = anotherMapper.readValue(jsonResponse, AdresseBAN.class);
         System.out.println(ader.getFeatures().get(0).getGeometry().toString());
         System.out.println(ader.getFeatures().get(0).getGeometry().getCoordinates());
-        System.out.println(getOperatingSystem());
 
-//        String queryParcelle = "{\"type\": \"Point\",\"coordinates\": [2.32557,48.830378]}";
-//        ParcelleAPI parcelleAPI = new ParcelleAPI(queryParcelle, "geom");
-//        String jsonParcelle = parcelleAPI.readReponseFromAPI(parcelleAPI.getConn());
-//        JsonNode jsonNodeParcelle =
+        System.out.println(" ");
+
+        String queryParcelle = "{\"type\": \"Point\",\"coordinates\": [2.32557,48.830378]}";
+        ParcelleAPI parcelleAPI = new ParcelleAPI(queryParcelle, "geom");
+        String jsonParcelle = parcelleAPI.readReponseFromAPI(parcelleAPI.getConn());
+        JsonNode jsonNodeParcelle = anotherMapper.readTree(jsonParcelle);
+        System.out.print("Parcelle : ");
+        System.out.println(jsonNodeParcelle.toString());
+
+        Parcelle parcelle = anotherMapper.readValue(jsonParcelle, Parcelle.class);
+        System.out.println(parcelle.getBbox().toString());
+        System.out.println(parcelle.getFeaturesParcelle().get(4).getParcelleProperties().toString());
 
 
 
