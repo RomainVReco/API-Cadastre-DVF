@@ -42,4 +42,11 @@ class ResponseManagerHTTPTest {
         assertEquals(400, adresse.getConn().getResponseCode());
         assertThrows(NoSuchElementException.class, () -> gestionCodeRetour.controleAdresseRetour(adresse).get());
     }
+
+    @Test
+    void controleParcelleRetourUnique() throws IOException, URISyntaxException {
+        String queryAdresse = "202 avenue du Maine";
+        AdresseAPI adresse = new AdresseAPI(queryAdresse);
+
+    }
 }

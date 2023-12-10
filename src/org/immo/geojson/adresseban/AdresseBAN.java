@@ -82,7 +82,7 @@ public class AdresseBAN {
             sb.append("Label : ").append(feature.getProperties().getLabel()).append(",\n");
             sb.append("Code INSEE : ").append(feature.getProperties().getCitycode()).append(",\n");
             sb.append("Context : ").append(feature.getProperties().getContext()).append(",\n");
-            sb.append("Geometry : ").append(feature.getGeometry().toString()).append("\n");
+            sb.append("Geometry point : ").append(feature.getGeometry().toString()).append("\n");
             if (!(i == getFeatures().size()-1)) {
                 sb.append(limitLine);
             }

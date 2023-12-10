@@ -1,6 +1,7 @@
 package org.immo.geojson.parcelle;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.immo.geojson.adresseban.FeatureAdresseBAN;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -80,5 +81,23 @@ public class Parcelle {
 
     public void setBbox(List<Double> bbox) {
         this.bbox = bbox;
+    }
+
+    public String showParcelleContent() {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        String limitLine = "\n################################################\n\n";
+        for (FeatureParcelle feature : getFeaturesParcelle()) {
+            sb.append("Parcelle id : ").append(feature.getId()).append(",\n");
+            sb.append("Parcelle idu : ").append(feature.getParcelleProperties().getIdu()).append(",\n");
+            sb.append("Contenance : ").append(feature.getParcelleProperties().getContenance()).append("m²").append(",\n");
+            sb.append("Contenance : ").append(feature.getParcelleProperties().getContenance()).append("m²").append(",\n");
+            sb.append("Border box : ").append(this.convertBboxToString());
+            if (!(i == getFeaturesParcelle().size()-1)) {
+                sb.append(limitLine);
+            }
+            i++;
+        }
+        return sb.toString();
     }
 }

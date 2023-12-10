@@ -8,9 +8,7 @@ public class GeometryPoint extends AbstractGeometry<List<Double>>{
 
     @Override
     public String toString() {
-        return "GeometryPoint{" +
-                "coordinates=" + coordinates +
-                '}';
+        return "{\"type\": \"Point\",\"coordinates\":"+coordinates+"}";
     }
 }
 
