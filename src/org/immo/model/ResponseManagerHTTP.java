@@ -66,6 +66,13 @@ public class ResponseManagerHTTP {
         return Optional.empty();
     }
 
+    /**
+     * A partir d'un appel à l'API du cadastre /parcelle, vérifie le code retour et renvoie un POJO d'une parcelle.
+     * @param requeteParcelle
+     * @return un Optional contenant ou non un POJO Parcelle
+     * @throws IOException
+     * @throws UnknownResponseCode
+     */
     public Optional<Parcelle> controleParcelleRetour(ParcelleAPI requeteParcelle) throws IOException, UnknownResponseCode {
         int codeRetour = requeteParcelle.getConn().getResponseCode();
         Parcelle parcelleReponse;
