@@ -1,12 +1,12 @@
 package TestJackson;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import org.immo.geojson.adresseban.AdresseBAN;
 import org.immo.geojson.mutation.Geomutation;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.servicepublicapi.AdresseAPI;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.immo.servicepublicapi.FeuilleAPI;
 import org.immo.servicepublicapi.GeomutationAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 
@@ -37,9 +37,6 @@ public class MainJackson {
         ObjectMapper anotherMapper = new ObjectMapper();
         JsonNode jsonNode = anotherMapper.readTree(jsonResponse);
 
-        System.out.println("Parsed JSON:");
-        System.out.println(jsonNode.toString());
-
         ObjectMapper newMapper = new ObjectMapper();
         AdresseBAN ader = anotherMapper.readValue(jsonResponse, AdresseBAN.class);
         System.out.println(" ");
@@ -53,13 +50,18 @@ public class MainJackson {
         Parcelle parcelle = anotherMapper.readValue(jsonParcelle, Parcelle.class);
         System.out.println(parcelle.getFeaturesParcelle().get(0).getParcelleProperties().toString());
         String bboxAvMaine = parcelle.convertBboxToString();
+        System.out.println(bboxAvMaine);
 
         // Geomutation API : bbox 202 avenue du Maine 2017
-        GeomutationAPI geomutationAPI = new GeomutationAPI("2017","92040", bboxAvMaine);
+        ObjectMapper geoMutationMapper = new ObjectMapper();
+        geoMutationMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        GeomutationAPI geomutationAPI = new GeomutationAPI("2017","75114", bboxAvMaine);
         String jsonGeoMutation = geomutationAPI.readReponseFromAPI(geomutationAPI.getConn());
-        JsonNode jsonNodeGeoMutation = anotherMapper.readTree(jsonGeoMutation);
-        Geomutation geomutation = anotherMapper.readValue(jsonGeoMutation, Geomutation.class);
-        geomutation.getResults().toString();
+        JsonNode jsonNodeGeoMutation = geoMutationMapper.readTree(jsonGeoMutation);
+        Geomutation geomutation = geoMutationMapper.readValue(jsonGeoMutation, Geomutation.class);
+        System.out.println(geomutation.getCount());
+        System.out.println(geomutation.getFeatures().size());
+        System.out.println(geomutation.getFeatures().get(0).getGeomutationPoperties().getValeurfonc());
 
     }
 

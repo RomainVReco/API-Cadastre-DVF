@@ -1,12 +1,28 @@
 package org.immo.geojson.mutation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class Geomutation {
+    @JsonProperty("type")
+    private String type;
+    @JsonProperty("count")
     private int count;
+    @JsonProperty("next")
     private String next;
+    @JsonProperty("previous")
     private String previous;
-    List<ResultsMutation> results;
+    @JsonProperty("features")
+    private List<FeatureMutation> features;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public int getCount() {
         return count;
@@ -32,11 +48,11 @@ public class Geomutation {
         this.previous = previous;
     }
 
-    public List<ResultsMutation> getResults() {
-        return results;
+    public List<FeatureMutation> getFeatures() {
+        return features;
     }
 
-    public void setResults(List<ResultsMutation> results) {
-        this.results = results;
+    public void setFeatures(List<FeatureMutation> features) {
+        this.features = features;
     }
 }
