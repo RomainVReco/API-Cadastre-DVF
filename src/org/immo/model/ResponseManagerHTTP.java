@@ -33,7 +33,6 @@ public class ResponseManagerHTTP {
                 else {
                     ObjectMapper objectMapper = new ObjectMapper();
                     adresseReponse = objectMapper.readValue(jsonReponse, AdresseBAN.class);
-                    System.out.println(adresseReponse.showAdresseBANContent());
                 }
                 return Optional.of(adresseReponse);
 
@@ -67,7 +66,7 @@ public class ResponseManagerHTTP {
         return Optional.empty();
     }
 
-    public Optional<Parcelle> controleAdresseRetour(ParcelleAPI requeteParcelle) throws IOException, UnknownResponseCode {
+    public Optional<Parcelle> controleParcelleRetour(ParcelleAPI requeteParcelle) throws IOException, UnknownResponseCode {
         int codeRetour = requeteParcelle.getConn().getResponseCode();
         Parcelle parcelleReponse;
         switch(codeRetour) {

@@ -2,8 +2,10 @@ package TestJackson;
 
 import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.parcelle.Parcelle;
 import org.immo.model.ResponseManagerHTTP;
 import org.immo.servicepublicapi.AdresseAPI;
+import org.immo.servicepublicapi.ParcelleAPI;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -44,9 +46,21 @@ class ResponseManagerHTTPTest {
     }
 
     @Test
-    void controleParcelleRetourUnique() throws IOException, URISyntaxException {
+    void controleParcelleRetourUnique() throws IOException, URISyntaxException, UnknownResponseCode {
         String queryAdresse = "202 avenue du Maine";
         AdresseAPI adresse = new AdresseAPI(queryAdresse);
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        AdresseBAN newAdress = gestionCodeRetour.controleAdresseRetour(adresse).get();
+        String pointQuery = newAdress.getFeatures().get(0).getGeometry().toString();
+        ParcelleAPI newParcelleQuery = new ParcelleAPI(pointQuery,"geom");
 
+        Parcelle newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery).get();
+    }
+
+    @Test
+    void controleParcelleRetourMultiples() throws IOException, URISyntaxException, UnknownResponseCode {
+        ParcelleAPI newParcelleQuery = new ParcelleAPI("CJ","section");
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        Parcelle newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery).get();
     }
 }

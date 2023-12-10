@@ -15,6 +15,8 @@ public class Parcelle {
     @JsonProperty("numberReturned")
     private int numberReturned;
     private String timeStamp;
+    @JsonProperty("links")
+    private List<Links> links;
     private Crs crs ;
     @JsonProperty("bbox")
     private List<Double> bbox ;
@@ -87,10 +89,10 @@ public class Parcelle {
         StringBuilder sb = new StringBuilder();
         int i = 0;
         String limitLine = "\n################################################\n\n";
+        System.out.println(getFeaturesParcelle().size());
         for (FeatureParcelle feature : getFeaturesParcelle()) {
             sb.append("Parcelle id : ").append(feature.getId()).append(",\n");
             sb.append("Parcelle idu : ").append(feature.getParcelleProperties().getIdu()).append(",\n");
-            sb.append("Contenance : ").append(feature.getParcelleProperties().getContenance()).append("m²").append(",\n");
             sb.append("Contenance : ").append(feature.getParcelleProperties().getContenance()).append("m²").append(",\n");
             sb.append("Border box : ").append(this.convertBboxToString());
             if (!(i == getFeaturesParcelle().size()-1)) {
