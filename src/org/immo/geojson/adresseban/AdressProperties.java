@@ -158,4 +158,15 @@ public class AdressProperties {
     public void setStreet(String street) {
         this.street = street;
     }
+
+    @Override
+    public String toString() {
+        return "AdressProperties{" +
+                "label='" + label + '\'' +
+                ", score=" + score +
+                ", id='" + id + '\'' +
+                ", citycode='" + citycode + '\'' +
+                ", context='" + context + '\'' +
+                '}';
+    }
 }

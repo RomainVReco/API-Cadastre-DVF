@@ -73,4 +73,21 @@ public class AdresseBAN {
                 ", limit=" + limit +
                 '}';
     }
+
+    public String showAdresseBANContent() {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        String limitLine = "\n################################################\n\n";
+        for (FeatureAdresseBAN feature : getFeatures()) {
+            sb.append("Label : ").append(feature.getProperties().getLabel()).append(",\n");
+            sb.append("Code INSEE : ").append(feature.getProperties().getCitycode()).append(",\n");
+            sb.append("Context : ").append(feature.getProperties().getContext()).append(",\n");
+            sb.append("Geometry : ").append(feature.getGeometry().toString()).append("\n");
+            if (!(i == getFeatures().size()-1)) {
+                sb.append(limitLine);
+            }
+            i++;
+        }
+        return sb.toString();
+    }
 }

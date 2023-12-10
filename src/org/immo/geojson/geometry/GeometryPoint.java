@@ -6,5 +6,11 @@ import java.util.List;
 
 public class GeometryPoint extends AbstractGeometry<List<Double>>{
 
+    @Override
+    public String toString() {
+        return "GeometryPoint{" +
+                "coordinates=" + coordinates +
+                '}';
+    }
 }
 
