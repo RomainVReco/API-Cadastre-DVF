@@ -2,9 +2,11 @@ package TestJackson;
 
 import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.geomutation.Geomutation;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.model.ResponseManagerHTTP;
 import org.immo.servicepublicapi.AdresseAPI;
+import org.immo.servicepublicapi.GeomutationAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 import org.junit.jupiter.api.Test;
 
@@ -74,4 +76,37 @@ class ResponseManagerHTTPTest {
         Optional<Parcelle> newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery);
         assertTrue(newParcelle.isEmpty());
     }
+
+    @Test
+    void controleGeomutationRetourMultiples () throws IOException, URISyntaxException, UnknownResponseCode {
+        String queryAdresse = "202 avenue du Maine";
+        AdresseAPI adresse = new AdresseAPI(queryAdresse);
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        AdresseBAN adresseBAN = gestionCodeRetour.controleAdresseRetour(adresse).get();
+        String pointQuery = adresseBAN.getFeatures().get(0).getGeometry().toString();
+        ParcelleAPI newParcelleQuery = new ParcelleAPI(pointQuery,"geom");
+        Parcelle newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery).get();
+        String bbox = newParcelle.convertBboxToString();
+
+        GeomutationAPI geomutationAPI = new GeomutationAPI("2017", "75114", bbox);
+        Geomutation newGeomutation = gestionCodeRetour.controleGeomutationRetour(geomutationAPI).get();
+        assertTrue(newGeomutation.getCount()>1);
+    }
+
+    //Le test sera KO lorsque la vente de septembre 2023 sera intégrée
+    @Test
+    void controleGeomutationRetourVide() throws IOException, URISyntaxException, UnknownResponseCode {
+        String queryAdresse = "31 avenue du Bas Meudon";
+        AdresseAPI adresse = new AdresseAPI(queryAdresse);
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        AdresseBAN adresseBAN = gestionCodeRetour.controleAdresseRetour(adresse).get();
+        String pointQuery = adresseBAN.getFeatures().get(0).getGeometry().toString();
+        ParcelleAPI newParcelleQuery = new ParcelleAPI(pointQuery,"geom");
+        Parcelle newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery).get();
+        String bbox = newParcelle.convertBboxToString();
+        GeomutationAPI geomutationAPI = new GeomutationAPI("2023", pointQuery, "92040", bbox);
+        assertTrue(gestionCodeRetour.controleGeomutationRetour(geomutationAPI).isEmpty());
+    }
+
+
 }

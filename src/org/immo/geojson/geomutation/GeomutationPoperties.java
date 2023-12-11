@@ -21,6 +21,7 @@ public class GeomutationPoperties {
     @JsonProperty("l_idpar")
     private List<String> lIdpar;
     private int nbparmut;
+    @JsonProperty("l_idparmut")
     private List<String> lIdparmut;
     private float sterr;
     private int nbvolmut;

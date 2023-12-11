@@ -132,7 +132,7 @@ public class ResponseManagerHTTP {
                 geomutationReponse = objectMapper.readValue(jsonReponse, Geomutation.class);
                 System.out.println(geomutationReponse.showGeomutationContent());
                 if (geomutationReponse.getCount() == 0) {
-                    System.out.println("Le contenu de la réponse sur la parcelle est vide");
+                    System.out.println("Le contenu de la réponse sur la geomutation est vide");
                     return Optional.empty();
                 }
                 else return Optional.of(geomutationReponse);
@@ -166,4 +166,6 @@ public class ResponseManagerHTTP {
         }
         return Optional.empty();
     }
+
+
 }

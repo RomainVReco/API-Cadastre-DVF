@@ -66,7 +66,7 @@ public class Geomutation {
             sb.append("Nombre de mutation(s) : ").append(this.count).append(",\n");
             sb.append("Id de mutation : ").append(feature.getId()).append("\n");
             sb.append("Date de mutation : ").append(feature.getGeomutationPoperties().getDatemut()).append("\n");
-            sb.append("Type de mutation : ").append((feature.getGeomutationPoperties().getLibnatmut()));
+            sb.append("Type de mutation : ").append((feature.getGeomutationPoperties().getLibnatmut())).append("\n");
             sb.append("VEFA : ").append(feature.getGeomutationPoperties().isVefa()).append("\n");
             sb.append("Montant de transaction : ").append(feature.getGeomutationPoperties().getValeurfonc()).append("\n");
             sb.append("Parcelle(s)  : ").append(feature.getGeomutationPoperties().getlIdpar().toString()).append("\n");
