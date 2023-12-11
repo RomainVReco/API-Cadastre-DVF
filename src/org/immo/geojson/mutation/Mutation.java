@@ -1,10 +1,10 @@
-package org.immo.geojson.dvf;
+package org.immo.geojson.mutation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class DVF {
+public class Mutation {
     private int idmutation;
     private String idmutinvar;
     private String idopendata;
@@ -655,5 +655,15 @@ public class DVF {
 
     public void setLibtypbien(String libtypbien) {
         this.libtypbien = libtypbien;
+    }
+
+    public String showMutationContent(){
+        StringBuilder sb = new StringBuilder();
+        String limitLine = "\n################################################\n\n";
+        sb.append("Id de mutation : ").append(this.getIdmutation()).append("\n");
+        sb.append("Date de mutation : ").append(this.getDatemut()).append("\n");
+        sb.append("Type de mutation : ").append((this.getGeomutationPoperties().getLibnatmut())).append("\n");
+        sb.append("VEFA : ").append(this.getGeomutationPoperties().isVefa()).append("\n");
+        sb.append("Montant de transaction : ").append(this.getGeomutationPoperties().getValeurfonc()).append("\n");
     }
 }

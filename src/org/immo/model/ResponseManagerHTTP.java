@@ -3,10 +3,12 @@ package org.immo.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.mutation.Mutation;
 import org.immo.geojson.geomutation.Geomutation;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.servicepublicapi.AdresseAPI;
 import org.immo.servicepublicapi.GeomutationAPI;
+import org.immo.servicepublicapi.MutationAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 
 import java.io.IOException;
@@ -167,5 +169,50 @@ public class ResponseManagerHTTP {
         return Optional.empty();
     }
 
+    public Optional<Mutation> controleMutationRetour(MutationAPI requeteMutation) throws IOException, UnknownResponseCode {
+        int codeRetour = requeteMutation.getConn().getResponseCode();
+        Mutation MutationReponse;
+        switch(codeRetour) {
+            case 200:
+                System.out.println("Code retour : 200. Requête OK");
+                String jsonReponse = requeteMutation.readReponseFromAPI(requeteMutation.getConn());
+                ObjectMapper objectMapper = new ObjectMapper();
+                MutationReponse = objectMapper.readValue(jsonReponse, Mutation.class);
+                System.out.println(MutationReponse.showGeomutationContent());
+                if (MutationReponse.getCount() == 0) {
+                    System.out.println("Le contenu de la réponse sur la geomutation est vide");
+                    return Optional.empty();
+                }
+                else return Optional.of(MutationReponse);
+
+            case 400:
+                System.out.println("Code retour : 400. Les critères de recherche sont incorrectes");
+                System.out.println("Motif : "+requeteMutation.getConn().getResponseMessage());
+                break;
+
+            case 403:
+                System.out.println("Code retour : 403. Vous ne pouvez pas accéder à ce contenu");
+                break;
+
+            case 404:
+                System.out.println("Code retour : 404. L'API n'existe plus");
+                break;
+            /**
+             * Limité à 50/secondes/IP
+             */
+            case 429:
+                System.out.println("Code retour : 429. Trop de requêtes");
+                break;
+
+            case 500:
+                System.out.println("Code retour : 500. Avez-vous une connexion internet ?");
+                break;
+
+            default:
+                System.out.println("Cas non prévu, il faut checker les logs");
+                throw new UnknownResponseCode("Code erreur inconnu");
+        }
+        return Optional.empty();
+    }
 
 }
