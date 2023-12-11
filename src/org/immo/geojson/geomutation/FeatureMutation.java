@@ -1,9 +1,7 @@
-package org.immo.geojson.mutation;
+package org.immo.geojson.geomutation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.immo.geojson.geometry.GeometryPolygon;
-
-import java.util.List;
 
 public class FeatureMutation {
     /**

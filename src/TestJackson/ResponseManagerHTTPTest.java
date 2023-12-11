@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,8 +54,9 @@ class ResponseManagerHTTPTest {
         AdresseBAN newAdress = gestionCodeRetour.controleAdresseRetour(adresse).get();
         String pointQuery = newAdress.getFeatures().get(0).getGeometry().toString();
         ParcelleAPI newParcelleQuery = new ParcelleAPI(pointQuery,"geom");
-
         Parcelle newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery).get();
+        assertNotNull(newParcelle);
+        assertEquals(1, newParcelle.getNumberReturned());
     }
 
     @Test
@@ -62,5 +64,14 @@ class ResponseManagerHTTPTest {
         ParcelleAPI newParcelleQuery = new ParcelleAPI("CJ","section");
         ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
         Parcelle newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery).get();
+        assertTrue(newParcelle.getNumberReturned()>1);
+    }
+
+    @Test
+    void controleParcelleRetourVide() throws IOException, URISyntaxException, UnknownResponseCode {
+        ParcelleAPI newParcelleQuery = new ParcelleAPI("cj","section");
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        Optional<Parcelle> newParcelle = gestionCodeRetour.controleParcelleRetour(newParcelleQuery);
+        assertTrue(newParcelle.isEmpty());
     }
 }

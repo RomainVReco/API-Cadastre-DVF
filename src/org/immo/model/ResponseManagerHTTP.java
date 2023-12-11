@@ -3,8 +3,10 @@ package org.immo.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.geomutation.Geomutation;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.servicepublicapi.AdresseAPI;
+import org.immo.servicepublicapi.GeomutationAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 
 import java.io.IOException;
@@ -80,20 +82,64 @@ public class ResponseManagerHTTP {
             case 200:
                 System.out.println("Code retour : 200. Requête OK");
                 String jsonReponse = requeteParcelle.readReponseFromAPI(requeteParcelle.getConn());
-                if (jsonReponse.isEmpty()) {
-                    System.out.println("Le contenu de la réponse sur l'adresse est vide");
+                ObjectMapper objectMapper = new ObjectMapper();
+                parcelleReponse = objectMapper.readValue(jsonReponse, Parcelle.class);
+                System.out.println(parcelleReponse.showParcelleContent());
+                if (parcelleReponse.getNumberReturned() == 0) {
+                    System.out.println("Le contenu de la réponse sur la parcelle est vide");
                     return Optional.empty();
                 }
-                else {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    parcelleReponse = objectMapper.readValue(jsonReponse, Parcelle.class);
-                    System.out.println(parcelleReponse.showParcelleContent());
-                }
-                return Optional.of(parcelleReponse);
+                else return Optional.of(parcelleReponse);
 
             case 400:
                 System.out.println("Code retour : 400. Les critères de recherche sont incorrectes");
                 System.out.println("Motif : "+requeteParcelle.getConn().getResponseMessage());
+                break;
+
+            case 403:
+                System.out.println("Code retour : 403. Vous ne pouvez pas accéder à ce contenu");
+                break;
+
+            case 404:
+                System.out.println("Code retour : 404. L'API n'existe plus");
+                break;
+            /**
+             * Limité à 50/secondes/IP
+             */
+            case 429:
+                System.out.println("Code retour : 429. Trop de requêtes");
+                break;
+
+            case 500:
+                System.out.println("Code retour : 500. Avez-vous une connexion internet ?");
+                break;
+
+            default:
+                System.out.println("Cas non prévu, il faut checker les logs");
+                throw new UnknownResponseCode("Code erreur inconnu");
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Geomutation> controleGeomutationRetour(GeomutationAPI requeteGeomutation) throws IOException, UnknownResponseCode {
+        int codeRetour = requeteGeomutation.getConn().getResponseCode();
+        Geomutation geomutationReponse;
+        switch(codeRetour) {
+            case 200:
+                System.out.println("Code retour : 200. Requête OK");
+                String jsonReponse = requeteGeomutation.readReponseFromAPI(requeteGeomutation.getConn());
+                ObjectMapper objectMapper = new ObjectMapper();
+                geomutationReponse = objectMapper.readValue(jsonReponse, Geomutation.class);
+                System.out.println(geomutationReponse.showGeomutationContent());
+                if (geomutationReponse.getCount() == 0) {
+                    System.out.println("Le contenu de la réponse sur la parcelle est vide");
+                    return Optional.empty();
+                }
+                else return Optional.of(geomutationReponse);
+
+            case 400:
+                System.out.println("Code retour : 400. Les critères de recherche sont incorrectes");
+                System.out.println("Motif : "+requeteGeomutation.getConn().getResponseMessage());
                 break;
 
             case 403:

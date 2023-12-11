@@ -49,6 +49,14 @@ public class Parcelle {
         return numberMatched;
     }
 
+    public int getNumberReturned() {
+        return numberReturned;
+    }
+
+    public List<Links> getLinks() {
+        return links;
+    }
+
     public void setNumberMatched(int numberMatched) {
         this.numberMatched = numberMatched;
     }

@@ -1,4 +1,4 @@
-package org.immo.geojson.mutation;
+package org.immo.geojson.dvf;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
