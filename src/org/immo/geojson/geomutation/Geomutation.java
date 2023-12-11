@@ -63,7 +63,16 @@ public class Geomutation {
         String limitLine = "\n################################################\n\n";
         System.out.println(getFeatures().size());
         for (FeatureMutation feature : getFeatures()) {
-            sb.append("Nombre de mutation(s) : ").append(feature.getId()).append(",\n");
+            sb.append("Nombre de mutation(s) : ").append(this.count).append(",\n");
+            sb.append("Id de mutation : ").append(feature.getId()).append("\n");
+            sb.append("Date de mutation : ").append(feature.getGeomutationPoperties().getDatemut()).append("\n");
+            sb.append("Type de mutation : ").append((feature.getGeomutationPoperties().getLibnatmut()));
+            sb.append("VEFA : ").append(feature.getGeomutationPoperties().isVefa()).append("\n");
+            sb.append("Montant de transaction : ").append(feature.getGeomutationPoperties().getValeurfonc()).append("\n");
+            sb.append("Parcelle(s)  : ").append(feature.getGeomutationPoperties().getlIdpar().toString()).append("\n");
+            sb.append("Nombre de lot  : ").append(feature.getGeomutationPoperties().getNblocmut()).append("\n");
+            sb.append("Surface du bati : ").append(feature.getGeomutationPoperties().getSbati()).append("m²").append("\n");
+            sb.append("Type de bien : ").append(feature.getGeomutationPoperties().getLibtypbien()).append("\n");
             if (!(i == getFeatures().size()-1)) {
                 sb.append(limitLine);
             }
