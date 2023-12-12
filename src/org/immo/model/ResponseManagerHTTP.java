@@ -178,12 +178,12 @@ public class ResponseManagerHTTP {
                 String jsonReponse = requeteMutation.readReponseFromAPI(requeteMutation.getConn());
                 ObjectMapper objectMapper = new ObjectMapper();
                 MutationReponse = objectMapper.readValue(jsonReponse, Mutation.class);
-                System.out.println(MutationReponse.showGeomutationContent());
-                if (MutationReponse.getCount() == 0) {
-                    System.out.println("Le contenu de la réponse sur la geomutation est vide");
-                    return Optional.empty();
-                }
-                else return Optional.of(MutationReponse);
+//                System.out.println(MutationReponse.showGeomutationContent());
+//                if (MutationReponse.getCount() == 0) {
+//                    System.out.println("Le contenu de la réponse sur la geomutation est vide");
+//                    return Optional.empty();
+//                }
+//                else return Optional.of(MutationReponse);
 
             case 400:
                 System.out.println("Code retour : 400. Les critères de recherche sont incorrectes");

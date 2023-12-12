@@ -58,6 +58,7 @@ public class Geomutation {
     }
 
     public String showGeomutationContent() {
+        int i = 0;
         StringBuilder sb = new StringBuilder();
         String limitLine = "\n################################################\n\n";
         System.out.println(getFeatures().size());

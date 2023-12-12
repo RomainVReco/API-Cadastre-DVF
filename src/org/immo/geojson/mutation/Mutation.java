@@ -662,8 +662,9 @@ public class Mutation {
         String limitLine = "\n################################################\n\n";
         sb.append("Id de mutation : ").append(this.getIdmutation()).append("\n");
         sb.append("Date de mutation : ").append(this.getDatemut()).append("\n");
-        sb.append("Type de mutation : ").append((this.getGeomutationPoperties().getLibnatmut())).append("\n");
-        sb.append("VEFA : ").append(this.getGeomutationPoperties().isVefa()).append("\n");
-        sb.append("Montant de transaction : ").append(this.getGeomutationPoperties().getValeurfonc()).append("\n");
+        sb.append("Type de mutation : ");
+        sb.append("VEFA : ");
+        sb.append("Montant de transaction : ");
+        return limitLine;
     }
 }
