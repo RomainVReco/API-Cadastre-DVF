@@ -1,4 +1,6 @@
 package org.immo.geojson.feuille;
 
-public class Feuille {
+import org.immo.geojson.parcelle.Parcelle;
+
+public class Feuille extends Parcelle {
 }
