@@ -123,6 +123,13 @@ public class ResponseManagerHTTP {
         return Optional.empty();
     }
 
+    /**
+     * A partir d'une coordonnées de parcelle ou de feuille, voire d'un point, récupère la liste des mutations.
+     * @param requeteGeomutation
+     * @return
+     * @throws IOException
+     * @throws UnknownResponseCode
+     */
     public Optional<Geomutation> controleGeomutationRetour(GeomutationAPI requeteGeomutation) throws IOException, UnknownResponseCode {
         int codeRetour = requeteGeomutation.getConn().getResponseCode();
         Geomutation geomutationReponse;
@@ -169,6 +176,13 @@ public class ResponseManagerHTTP {
         return Optional.empty();
     }
 
+    /**
+     * A partir d'un id de mutation, récupère l'intégralité des détails de l'opération acccessible depuis l'API DVF+
+     * @param requeteMutation
+     * @return
+     * @throws IOException
+     * @throws UnknownResponseCode
+     */
     public Optional<Mutation> controleMutationRetour(MutationAPI requeteMutation) throws IOException, UnknownResponseCode {
         int codeRetour = requeteMutation.getConn().getResponseCode();
         Mutation MutationReponse;
@@ -178,12 +192,8 @@ public class ResponseManagerHTTP {
                 String jsonReponse = requeteMutation.readReponseFromAPI(requeteMutation.getConn());
                 ObjectMapper objectMapper = new ObjectMapper();
                 MutationReponse = objectMapper.readValue(jsonReponse, Mutation.class);
-//                System.out.println(MutationReponse.showGeomutationContent());
-//                if (MutationReponse.getCount() == 0) {
-//                    System.out.println("Le contenu de la réponse sur la geomutation est vide");
-//                    return Optional.empty();
-//                }
-//                else return Optional.of(MutationReponse);
+                System.out.println(MutationReponse.showMutationContent());
+                return Optional.of(MutationReponse);
 
             case 400:
                 System.out.println("Code retour : 400. Les critères de recherche sont incorrectes");
@@ -195,11 +205,9 @@ public class ResponseManagerHTTP {
                 break;
 
             case 404:
-                System.out.println("Code retour : 404. L'API n'existe plus");
+                System.out.println("Code retour : 404. L'id de mutation renseigné ne correspond à aucune transaction");
                 break;
-            /**
-             * Limité à 50/secondes/IP
-             */
+
             case 429:
                 System.out.println("Code retour : 429. Trop de requêtes");
                 break;
@@ -210,7 +218,7 @@ public class ResponseManagerHTTP {
 
             default:
                 System.out.println("Cas non prévu, il faut checker les logs");
-                throw new UnknownResponseCode("Code erreur inconnu");
+                throw new UnknownResponseCode("Code erreur inconnu : "+requeteMutation.getConn().getResponseMessage());
         }
         return Optional.empty();
     }

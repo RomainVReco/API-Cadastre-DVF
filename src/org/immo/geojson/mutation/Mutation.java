@@ -5,6 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class Mutation {
+
+// Pour des raison de visibilité, les déclarations de variables, getter/setter se situent sous les méthodes
+    public String showMutationContent(){
+        StringBuilder sb = new StringBuilder();
+        String limitLine = "\n################################################\n\n";
+        sb.append("Id de mutation : ").append(this.idmutation).append("\n");
+        sb.append("Date de mutation : ").append(this.datemut).append("\n");
+        sb.append("Type de mutation : ").append(this.libnatmut).append("\n");
+        sb.append("VEFA : ").append(this.vefa).append("\n");
+        sb.append("Montant de transaction : ").append(this.valeurfonc).append("\n");
+        sb.append("Nombre de lot(s) : ").append(this.nblot).append("\n");
+//        sb.append("Nombre de locaux : ").append(this.nblocmut).append("\n");
+        sb.append("Nombre de dépendance : ").append(this.nblocdep).append("\n");
+        sb.append("Surface du bati : ").append(this.sbati).append("\n");
+        sb.append("Type de bien : ").append(this.libtypbien).append("\n");
+        sb.append(limitLine);
+        return sb.toString();
+    }
+
     private int idmutation;
     private String idmutinvar;
     private String idopendata;
@@ -25,7 +44,7 @@ public class Mutation {
     private int nblot;
     private int nbcomm;
     @JsonProperty("l_codinsee")
-    private int lCodInsee;
+    private List<String> lCodInsee;
     private byte nbsection;
     @JsonProperty("l_section")
     private List<String> lSection;
@@ -37,7 +56,7 @@ public class Mutation {
     private List<String> lIdParMut;
     private int nbsuf;
     private float sterr;
-    @JsonProperty("l_dnct")
+    @JsonProperty("l_dcnt")
     private List<String> lDcnt;
     private byte nbvolmut;
     /**
@@ -47,6 +66,7 @@ public class Mutation {
     /**
      * liste des identifiants de locaux ayant muté (idloc)
      */
+    @JsonProperty("l_idlocmut")
     private List<String> lIdLocMut;
     /**
      * 	nombre de maisons ayant muté
@@ -313,11 +333,11 @@ public class Mutation {
         this.nbcomm = nbcomm;
     }
 
-    public int getlCodInsee() {
+    public List<String> getlCodInsee() {
         return lCodInsee;
     }
 
-    public void setlCodInsee(int lCodInsee) {
+    public void setlCodInsee(List<String> lCodInsee) {
         this.lCodInsee = lCodInsee;
     }
 
@@ -657,14 +677,4 @@ public class Mutation {
         this.libtypbien = libtypbien;
     }
 
-    public String showMutationContent(){
-        StringBuilder sb = new StringBuilder();
-        String limitLine = "\n################################################\n\n";
-        sb.append("Id de mutation : ").append(this.getIdmutation()).append("\n");
-        sb.append("Date de mutation : ").append(this.getDatemut()).append("\n");
-        sb.append("Type de mutation : ");
-        sb.append("VEFA : ");
-        sb.append("Montant de transaction : ");
-        return limitLine;
-    }
 }

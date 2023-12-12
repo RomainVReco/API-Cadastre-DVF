@@ -3,14 +3,17 @@ package TestJackson;
 import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.adresseban.AdresseBAN;
 import org.immo.geojson.geomutation.Geomutation;
+import org.immo.geojson.mutation.Mutation;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.model.ResponseManagerHTTP;
 import org.immo.servicepublicapi.AdresseAPI;
 import org.immo.servicepublicapi.GeomutationAPI;
+import org.immo.servicepublicapi.MutationAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -108,5 +111,20 @@ class ResponseManagerHTTPTest {
         assertTrue(gestionCodeRetour.controleGeomutationRetour(geomutationAPI).isEmpty());
     }
 
+    @Test
+    void controleMutationRetour () throws IOException, URISyntaxException, UnknownResponseCode {
+        MutationAPI mutationAPI = new MutationAPI(9957202);
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        Mutation mutation = gestionCodeRetour.controleMutationRetour(mutationAPI).get();
+        mutation.showMutationContent();
+    }
+
+    @Test
+    void controleMutationRetourVide () throws IOException, URISyntaxException, UnknownResponseCode {
+        MutationAPI mutationAPI = new MutationAPI(0);
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        assertThrows(NoSuchElementException.class, () ->gestionCodeRetour.controleMutationRetour(mutationAPI).get());
+        assertEquals(404, mutationAPI.getConn().getResponseCode());
+    }
 
 }
