@@ -21,7 +21,6 @@ public abstract class AbstractProperties {
     private String comAbs;
     @JsonProperty("code_arr")
     private String codeArr;
-    private String idu;
     @JsonProperty("code_insee")
     private String codeInsee;
     private String contenance;
@@ -30,7 +29,7 @@ public abstract class AbstractProperties {
 
     @Override
     public String toString() {
-        return "ParcelleProperties{" +
+        return "Properties{" +
                 "numero='" + numero + '\'' +
                 ", feuille=" + feuille +
                 ", section='" + section + '\'' +
@@ -39,7 +38,6 @@ public abstract class AbstractProperties {
                 ", codeCommune='" + codeCommune + '\'' +
                 ", comAbs='" + comAbs + '\'' +
                 ", codeArr='" + codeArr + '\'' +
-                ", idu='" + idu + '\'' +
                 ", codeInsee='" + codeInsee + '\'' +
                 ", contenance='" + contenance + '\'' +
                 ", bbox=" + bbox +
@@ -108,14 +106,6 @@ public abstract class AbstractProperties {
 
     public void setCodeArr(String codeArr) {
         this.codeArr = codeArr;
-    }
-
-    public String getIdu() {
-        return idu;
-    }
-
-    public void setIdu(String idu) {
-        this.idu = idu;
     }
 
     public String getCodeInsee() {

@@ -2,7 +2,6 @@ package org.immo.abstractcomponent;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.immo.geojson.parcelle.Crs;
-import org.immo.geojson.parcelle.FeatureParcelle;
 import org.immo.geojson.parcelle.Links;
 
 import java.util.List;
@@ -94,5 +93,5 @@ public abstract class AbstractTerrain<T>{
         this.bbox = bbox;
     }
 
-    public abstract String showParcelleContent();
+    public abstract String showTerrainContent();
 }

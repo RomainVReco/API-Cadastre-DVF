@@ -5,7 +5,7 @@ import org.immo.abstractcomponent.AbstractTerrain;
 public class Parcelle extends AbstractTerrain<FeatureParcelle> {
 
     @Override
-    public String showParcelleContent() {
+    public String showTerrainContent() {
         StringBuilder sb = new StringBuilder();
         int i = 0;
         String limitLine = "\n################################################\n\n";

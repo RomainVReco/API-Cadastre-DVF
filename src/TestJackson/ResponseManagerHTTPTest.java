@@ -2,14 +2,12 @@ package TestJackson;
 
 import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.feuille.Feuille;
 import org.immo.geojson.geomutation.Geomutation;
 import org.immo.geojson.mutation.Mutation;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.model.ResponseManagerHTTP;
-import org.immo.servicepublicapi.AdresseAPI;
-import org.immo.servicepublicapi.GeomutationAPI;
-import org.immo.servicepublicapi.MutationAPI;
-import org.immo.servicepublicapi.ParcelleAPI;
+import org.immo.servicepublicapi.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -125,6 +123,15 @@ class ResponseManagerHTTPTest {
         ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
         assertThrows(NoSuchElementException.class, () ->gestionCodeRetour.controleMutationRetour(mutationAPI).get());
         assertEquals(404, mutationAPI.getConn().getResponseCode());
+    }
+
+    @Test
+    void controleFeuilleRetourMultiples () throws IOException, URISyntaxException, UnknownResponseCode {
+        String query = "{     \"type\": \"Point\",     \"coordinates\": [      2.247021,      48.822554     ]    }";
+        FeuilleAPI feuilleAPI = new FeuilleAPI(query, "geom");
+        ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
+        Feuille feuille = gestionCodeRetour.controleFeuilleRetour(feuilleAPI).get();
+        assertEquals(200, feuilleAPI.getConn().getResponseCode());
     }
 
 }
