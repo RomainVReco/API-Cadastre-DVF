@@ -3,13 +3,11 @@ package org.immo.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.feuille.Feuille;
 import org.immo.geojson.mutation.Mutation;
 import org.immo.geojson.geomutation.Geomutation;
 import org.immo.geojson.parcelle.Parcelle;
-import org.immo.servicepublicapi.AdresseAPI;
-import org.immo.servicepublicapi.GeomutationAPI;
-import org.immo.servicepublicapi.MutationAPI;
-import org.immo.servicepublicapi.ParcelleAPI;
+import org.immo.servicepublicapi.*;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -86,7 +84,7 @@ public class ResponseManagerHTTP {
                 String jsonReponse = requeteParcelle.readReponseFromAPI(requeteParcelle.getConn());
                 ObjectMapper objectMapper = new ObjectMapper();
                 parcelleReponse = objectMapper.readValue(jsonReponse, Parcelle.class);
-                System.out.println(parcelleReponse.showParcelleContent());
+                System.out.println(parcelleReponse.showTerrainContent());
                 if (parcelleReponse.getNumberReturned() == 0) {
                     System.out.println("Le contenu de la réponse sur la parcelle est vide");
                     return Optional.empty();
@@ -184,43 +182,63 @@ public class ResponseManagerHTTP {
      * @throws UnknownResponseCode
      */
     public Optional<Mutation> controleMutationRetour(MutationAPI requeteMutation) throws IOException, UnknownResponseCode {
-        int codeRetour = requeteMutation.getConn().getResponseCode();
-        Mutation MutationReponse;
-        switch(codeRetour) {
-            case 200:
-                System.out.println("Code retour : 200. Requête OK");
-                String jsonReponse = requeteMutation.readReponseFromAPI(requeteMutation.getConn());
-                ObjectMapper objectMapper = new ObjectMapper();
-                MutationReponse = objectMapper.readValue(jsonReponse, Mutation.class);
-                System.out.println(MutationReponse.showMutationContent());
-                return Optional.of(MutationReponse);
+        if (isSuccess(requeteMutation)) {
+            Mutation MutationReponse;
+            String jsonReponse = requeteMutation.readReponseFromAPI(requeteMutation.getConn());
+            ObjectMapper objectMapper = new ObjectMapper();
+            MutationReponse = objectMapper.readValue(jsonReponse, Mutation.class);
+            System.out.println(MutationReponse.showMutationContent());
+            return Optional.of(MutationReponse);
+        }
+        else return Optional.empty();
+    }
 
-            case 400:
-                System.out.println("Code retour : 400. Les critères de recherche sont incorrectes");
-                System.out.println("Motif : "+requeteMutation.getConn().getResponseMessage());
-                break;
-
-            case 403:
-                System.out.println("Code retour : 403. Vous ne pouvez pas accéder à ce contenu");
-                break;
-
-            case 404:
-                System.out.println("Code retour : 404. L'id de mutation renseigné ne correspond à aucune transaction");
-                break;
-
-            case 429:
-                System.out.println("Code retour : 429. Trop de requêtes");
-                break;
-
-            case 500:
-                System.out.println("Code retour : 500. Avez-vous une connexion internet ?");
-                break;
-
-            default:
-                System.out.println("Cas non prévu, il faut checker les logs");
-                throw new UnknownResponseCode("Code erreur inconnu : "+requeteMutation.getConn().getResponseMessage());
+    public Optional<Feuille> controleFeuilleRetour(FeuilleAPI requeteFeuille) throws IOException, UnknownResponseCode {
+        if (isSuccess(requeteFeuille)) {
+            Feuille feuilleReponse;
+            String jsonReponse = requeteFeuille.readReponseFromAPI(requeteFeuille.getConn());
+            ObjectMapper objectMapper = new ObjectMapper();
+            feuilleReponse = objectMapper.readValue(jsonReponse, Feuille.class);
+            System.out.println(feuilleReponse.showTerrainContent());
+            return Optional.of(feuilleReponse);
         }
         return Optional.empty();
     }
 
+    private boolean isSuccess(AbstractRequestAPI requestAPI) throws IOException, UnknownResponseCode {
+        switch(requestAPI.getConn().getResponseCode()) {
+            case 200:
+                System.out.println("Code retour : 200. Requête OK");
+                return true;
+
+            case 400:
+                System.out.println("Code retour : 400");
+                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                return false;
+
+            case 403:
+                System.out.println("Code retour : 403");
+                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                return false;
+
+            case 404:
+                System.out.println("Code retour : 404");
+                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                return false;
+
+            case 429:
+                System.out.println("Code retour : 429");
+                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                return false;
+
+            case 500:
+                System.out.println("Code retour : 500. Avez-vous une connexion internet ?");
+                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                return false;
+
+            default:
+                System.out.println("Cas non prévu, il faut checker les logs");
+                throw new UnknownResponseCode("Code erreur inconnu : "+requestAPI.getConn().getResponseMessage());
+        }
+    }
 }
