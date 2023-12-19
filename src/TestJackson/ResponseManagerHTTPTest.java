@@ -130,8 +130,10 @@ class ResponseManagerHTTPTest {
         String query = "{     \"type\": \"Point\",     \"coordinates\": [      2.247021,      48.822554     ]    }";
         FeuilleAPI feuilleAPI = new FeuilleAPI(query, "geom");
         ResponseManagerHTTP gestionCodeRetour = new ResponseManagerHTTP();
-        Feuille feuille = gestionCodeRetour.controleFeuilleRetour(feuilleAPI).get();
+        Optional<Feuille> optionalFeuille = gestionCodeRetour.controleFeuilleRetour(feuilleAPI);
         assertEquals(200, feuilleAPI.getConn().getResponseCode());
+        assertTrue(optionalFeuille.isPresent());
+        assertEquals("urn:ogc:def:crs:EPSG::4326", optionalFeuille.get().getCrs().getCrsProperties().getName());
     }
 
 }
