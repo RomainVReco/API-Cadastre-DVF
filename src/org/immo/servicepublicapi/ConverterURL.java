@@ -10,7 +10,12 @@ public class ConverterURL {
 
     public ConverterURL (String query) {
         this.query=query;
-        this.encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+        String refinedQuery = removeWhiteSpace(query);
+        this.encodedQuery = URLEncoder.encode(refinedQuery, StandardCharsets.UTF_8);
+    }
+
+    private String removeWhiteSpace(String query) {
+        return query.replaceAll("\\s","" );
     }
 
     public String getQuery() {

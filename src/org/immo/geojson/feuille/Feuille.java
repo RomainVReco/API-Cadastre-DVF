@@ -1,7 +1,10 @@
 package org.immo.geojson.feuille;
 
 import org.immo.abstractcomponent.AbstractTerrain;
-import org.immo.geojson.parcelle.FeatureParcelle;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Feuille extends AbstractTerrain<FeatureFeuille> {
 
@@ -22,5 +25,30 @@ public class Feuille extends AbstractTerrain<FeatureFeuille> {
             i++;
         }
         return sb.toString();
+    }
+
+    public String getStringFromSectionOfCity() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Code INSEE : ").append(this.getFeaturesTerrain().getFirst().getTerrainProperties().getCodeInsee()).append("\n");
+        sb.append("Nombre de résultats : ").append(this.getNumberReturned()).append("\n");
+        int i = 0;
+        String limitLine = "##############\n";
+        for (FeatureFeuille feature : getFeaturesTerrain()) {
+            sb.append("Section : ").append(feature.getTerrainProperties().getSection()).append("\n");
+            if (!(i == getFeaturesTerrain().size()-1)) {
+                sb.append(limitLine);
+            }
+            i++;
+        }
+        return sb.toString();
+    }
+
+    public Set<List<Double>> getListOfSectionsFromCity () {
+        Set<List<Double>> setOfSections = new HashSet<>();
+        System.out.println(this.getStringFromSectionOfCity());
+        for (FeatureFeuille feature : getFeaturesTerrain()) {
+            setOfSections.add(feature.getTerrainProperties().getBbox());
+        }
+        return setOfSections;
     }
 }
