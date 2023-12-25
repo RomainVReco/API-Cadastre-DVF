@@ -16,7 +16,7 @@ public class ResponseManagerHTTP<T> {
      * @return Un Optional contenant null ou un POJO AdresseBAN
      * @throws IOException
      */
-    public Optional<T> getAPIReturn(AbstractRequestAPI request, Class<T> typeClass) throws IOException {
+    public Optional<T> getAPIReturn(AbstractRequestAPI request, Class<T> typeClass)  {
         try {
             if (isSuccess(request)) {
                 T objectResponse;
@@ -25,8 +25,9 @@ public class ResponseManagerHTTP<T> {
                 objectResponse = objectMapper.readValue(jsonResponse, typeClass);
                 return Optional.of(objectResponse);
             }
-        } catch (UnknownResponseCode e) {
-            throw new RuntimeException(e);
+        } catch (UnknownResponseCode | IOException e) {
+            e.printStackTrace();
+            System.out.println("Could not convert API call in POJO");
         }
         return Optional.empty();
     }
