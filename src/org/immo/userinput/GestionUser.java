@@ -1,11 +1,16 @@
 package org.immo.userinput;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
  */
 public class GestionUser {
+
+    Pattern p = Pattern.compile("[0-9]");
+    Matcher m;
 
     public GestionUser() {
     }
@@ -23,11 +28,12 @@ public class GestionUser {
         boolean validInput = false;
         do {
             String input = scanner.nextLine();
-            if (input.length() == 4 && (input.equals("Y") || input.equals("N"))) {
+            m = p.matcher(input);
+            if (input.length() == 4 && (m.matches()) && (Integer.parseInt(input)>=2010)) {
                 userInput = input;
                 validInput = true;
             } else {
-                System.out.println("Invalid input. Please enter Y or N.");
+                System.out.println("Année incorrecte");
             }
         } while (!validInput);
 
