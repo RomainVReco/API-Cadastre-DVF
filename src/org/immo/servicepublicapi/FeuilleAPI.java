@@ -23,5 +23,14 @@ public class FeuilleAPI extends AbstractRequestAPI {
         System.out.println("conn : "+conn.getResponseMessage());
     }
 
+    public FeuilleAPI(String query) throws IOException, URISyntaxException {
+        StringBuilder sb = new StringBuilder();
+        String encodedQuery = new ConverterURL(query).getEncodedQuery();
+        sb.append(URL_API).append("geom=").append(encodedQuery);
+        URL = new URI(sb.toString()).toURL();
+        this.conn = this.getRequestResult(this.URL);
+        System.out.println("Response code: " + conn.getResponseCode());
+        System.out.println("conn : "+conn.getResponseMessage());
+    }
 
 }

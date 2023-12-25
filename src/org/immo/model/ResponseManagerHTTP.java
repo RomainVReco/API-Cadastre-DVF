@@ -16,51 +16,56 @@ public class ResponseManagerHTTP<T> {
      * @return Un Optional contenant null ou un POJO AdresseBAN
      * @throws IOException
      */
-    public Optional<T> getAPIReturn(AbstractRequestAPI request, Class<T> typeClass) throws IOException, UnknownResponseCode {
-        if (isSuccess(request)) {
-            T objectResponse;
-            String jsonResponse = request.readReponseFromAPI(request.getConn());
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectResponse = objectMapper.readValue(jsonResponse, typeClass);
-            return Optional.of(objectResponse);
+    public Optional<T> getAPIReturn(AbstractRequestAPI request, Class<T> typeClass) throws IOException {
+        try {
+            if (isSuccess(request)) {
+                T objectResponse;
+                String jsonResponse = request.readReponseFromAPI(request.getConn());
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectResponse = objectMapper.readValue(jsonResponse, typeClass);
+                return Optional.of(objectResponse);
+            }
+        } catch (UnknownResponseCode e) {
+            throw new RuntimeException(e);
         }
         return Optional.empty();
     }
 
     private boolean isSuccess(AbstractRequestAPI requestAPI) throws IOException, UnknownResponseCode {
-        switch(requestAPI.getConn().getResponseCode()) {
-            case 200:
+        switch (requestAPI.getConn().getResponseCode()) {
+            case 200 -> {
                 System.out.println("Code retour : 200. Requête OK");
                 return true;
-
-            case 400:
+            }
+            case 400 -> {
                 System.out.println("Code retour : 400");
-                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                System.out.println("Motif : " + requestAPI.getConn().getResponseMessage());
                 return false;
-
-            case 403:
+            }
+            case 403 -> {
                 System.out.println("Code retour : 403");
-                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                System.out.println("Motif : " + requestAPI.getConn().getResponseMessage());
                 return false;
-
-            case 404:
+            }
+            case 404 -> {
                 System.out.println("Code retour : 404");
-                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                System.out.println("Motif : " + requestAPI.getConn().getResponseMessage());
                 return false;
-
-            case 429:
+            }
+            case 429 -> {
                 System.out.println("Code retour : 429");
-                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                System.out.println("Motif : " + requestAPI.getConn().getResponseMessage());
                 return false;
-
-            case 500:
+            }
+            case 500 -> {
                 System.out.println("Code retour : 500. Avez-vous une connexion internet ?");
-                System.out.println("Motif : "+requestAPI.getConn().getResponseMessage());
+                System.out.println("Motif : " + requestAPI.getConn().getResponseMessage());
                 return false;
-
-            default:
+            }
+            default -> {
                 System.out.println("Cas non prévu, il faut checker les logs");
-                throw new UnknownResponseCode("Code erreur inconnu : "+requestAPI.getConn().getResponseMessage());
+                throw new UnknownResponseCode("Code erreur inconnu : " + requestAPI.getConn().getResponseMessage());
+            }
         }
     }
 }

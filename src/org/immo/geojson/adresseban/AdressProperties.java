@@ -127,7 +127,7 @@ public class AdressProperties {
         this.district = district;
     }
 
-    public String getContext() {
+    public String   getContext() {
         return context;
     }
 
