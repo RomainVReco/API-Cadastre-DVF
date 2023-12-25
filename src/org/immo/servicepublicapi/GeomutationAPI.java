@@ -17,7 +17,7 @@ public class GeomutationAPI extends AbstractRequestAPI {
         String encodedQuery = "&in_bbox="+new ConverterURL(bbox).getEncodedQuery();
         String code_insee = ("&code_insee="+codeInsee);
         String annee_mutation = "anneemut="+anneeMutation;
-        sb.append(annee_mutation).append(code_insee).append(encodedQuery);
+        sb.append(URL_API).append(annee_mutation).append(code_insee).append(encodedQuery);
         URL = new URI(sb.toString()).toURL();
         System.out.println(URL);
         this.conn = this.getRequestResult(this.URL);

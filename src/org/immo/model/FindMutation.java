@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.Set;
 
 public class FindMutation {
@@ -24,29 +23,33 @@ public class FindMutation {
     private ResponseManagerHTTP<Feuille> responseManagerFeuille;
     private ResponseManagerHTTP<Geomutation> responseManagerGeomutation;
     private final String EMPTY_RETURN = "No object in POJO";
-
     private Set<FeatureMutation> setOfGeomutations = new HashSet<>();
+    Geomutation geomutation;
 
     public FindMutation(String query) {
-        Optional<AdresseBAN> optionalAdresseBAN = getAdressFromQuery(query);
+        try {
+            getAdressFromQuery(query);
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         String bboxOfFeuille = new String();
 
     }
 
-    public Optional<AdresseBAN> getAdressFromQuery(String adresse) {
+    public void getAdressFromQuery(String adresse) throws IOException, URISyntaxException {
         callAPI = new AdresseAPI(adresse);
         responseManagerAdresse = new ResponseManagerHTTP<>();
         Optional<AdresseBAN> optionalAdresseBAN = responseManagerAdresse.getAPIReturn(callAPI, AdresseBAN.class);
-        return optionalAdresseBAN;
+        getListOfAdress(optionalAdresseBAN);
     }
 
-    private String getListOfAdress(Optional<AdresseBAN> optionalAdresseBAN) throws IOException, URISyntaxException {
+    private void getListOfAdress(Optional<AdresseBAN> optionalAdresseBAN) throws IOException, URISyntaxException {
         Optional<Feuille> optionalFeuille;
         String bboxOfFeuille;
         AdresseBAN adresseBan;
         if (optionalAdresseBAN.isPresent()){
             adresseBan = optionalAdresseBAN.get();
-        } else return EMPTY_RETURN;
+        } else return;
         if (adresseBan.getFeatures().size()==1) {
             String geomtryPoint = adresseBan.getFeatures().get(0).getGeometry().toString();
             responseManagerFeuille = new ResponseManagerHTTP<>();
@@ -57,7 +60,6 @@ public class FindMutation {
                 getGeomutationsFromFeuille(bboxOfFeuille, adresseBan.getFeatures().get(0).getProperties().getCitycode());
             }
         }
-        return null;
     }
 
     private void getGeomutationsFromFeuille(String bboxOfFeuille, String cityCode) throws URISyntaxException, IOException {
@@ -68,12 +70,25 @@ public class FindMutation {
         responseManagerGeomutation = new ResponseManagerHTTP<>();
         Optional<Geomutation> optionalGeomutation = responseManagerGeomutation.getAPIReturn(callAPI, Geomutation.class);
         if (optionalGeomutation.isPresent()) {
-            Geomutation geomutation = optionalGeomutation.orElse(new Geomutation());
+            geomutation = optionalGeomutation.orElse(new Geomutation());
             System.out.println(geomutation.showGeomutationContent());
-            if (geomutation.getNext().isEmpty()){
                 setOfGeomutations.addAll(geomutation.getFeatures());
-            }
         }
     }
 
+    public Set<FeatureMutation> getSetOfGeomutations() {
+        return setOfGeomutations;
+    }
+
+    public void setSetOfGeomutations(Set<FeatureMutation> setOfGeomutations) {
+        this.setOfGeomutations = setOfGeomutations;
+    }
+
+    public Geomutation getGeomutation() {
+        return geomutation;
+    }
+
+    public void setGeomutation(Geomutation geomutation) {
+        this.geomutation = geomutation;
+    }
 }

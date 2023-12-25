@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public class GestionUser {
 
-    Pattern p = Pattern.compile("[0-9]");
+    Pattern p = Pattern.compile("[0-9]+[0-9]+[0-9]+[0-9]");
     Matcher m;
 
     public GestionUser() {
@@ -29,7 +29,7 @@ public class GestionUser {
         do {
             String input = scanner.nextLine();
             m = p.matcher(input);
-            if (input.length() == 4 && (m.matches()) && (Integer.parseInt(input)>=2010)) {
+            if (input.length() == 4 && m.matches() && (Integer.parseInt(input)>=2010)) {
                 userInput = input;
                 validInput = true;
             } else {
