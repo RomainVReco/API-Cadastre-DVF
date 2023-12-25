@@ -29,7 +29,7 @@ public class Feuille extends AbstractTerrain<FeatureFeuille> {
 
     public String getStringFromSectionOfCity() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Code INSEE : ").append(this.getFeaturesTerrain().getFirst().getTerrainProperties().getCodeInsee()).append("\n");
+        sb.append("Code INSEE : ").append(this.getFeaturesTerrain().get(0).getTerrainProperties().getCodeInsee()).append("\n");
         sb.append("Nombre de résultats : ").append(this.getNumberReturned()).append("\n");
         int i = 0;
         String limitLine = "##############\n";

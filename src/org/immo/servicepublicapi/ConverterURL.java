@@ -9,9 +9,7 @@ public class ConverterURL {
     String encodedQuery;
 
     public ConverterURL (String query) {
-        this.query=query;
-        String refinedQuery = removeWhiteSpace(query);
-        this.encodedQuery = URLEncoder.encode(refinedQuery, StandardCharsets.UTF_8);
+        this.encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
     }
 
     private String removeWhiteSpace(String query) {
