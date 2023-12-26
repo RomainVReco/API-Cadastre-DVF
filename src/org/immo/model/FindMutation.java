@@ -98,15 +98,12 @@ public class FindMutation {
             geomutation = optionalGeomutation.orElse(new Geomutation());
             System.out.println(geomutation.showGeomutationContent());
             setOfGeomutations.addAll(geomutation.getFeatures());
-            if (geomutation.getNext() != null) {
-                do {
+            while (geomutation.getNext() != null) {
                     callAPI = new NextPageAPI(geomutation.getNext());
                     geomutation = responseManagerGeomutation.getAPIReturn(callAPI, Geomutation.class).get();
                     System.out.println(geomutation.showGeomutationContent());
                     setOfGeomutations.addAll(geomutation.getFeatures());
-                } while (geomutation.getNext() != null);
             }
-
         } else {
             System.out.println("Pas de mutation pout cette adresse");
         }

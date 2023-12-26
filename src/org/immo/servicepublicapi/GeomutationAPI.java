@@ -33,7 +33,6 @@ public class GeomutationAPI extends AbstractRequestAPI {
                 numberOfTries++;
             }
         } while ((!hasSucceed) || (numberOfTries > 3));
-        System.out.println("Response code: " + conn.getResponseCode());
     }
 
     /**
