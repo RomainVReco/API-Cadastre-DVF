@@ -1,6 +1,7 @@
 package org.immo.model;
 
 import org.immo.geojson.adresseban.AdresseBAN;
+import org.immo.geojson.adresseban.FeatureAdresseBAN;
 import org.immo.geojson.feuille.Feuille;
 import org.immo.geojson.geomutation.FeatureMutation;
 import org.immo.geojson.geomutation.Geomutation;
@@ -12,6 +13,7 @@ import org.immo.userinput.GestionUser;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -25,6 +27,7 @@ public class FindMutation {
     private final String EMPTY_RETURN = "No object in POJO";
     private Set<FeatureMutation> setOfGeomutations = new HashSet<>();
     Geomutation geomutation;
+    GestionUser gestionUser = new GestionUser();
 
     public FindMutation(String query) {
         try {
@@ -49,7 +52,10 @@ public class FindMutation {
         AdresseBAN adresseBan;
         if (optionalAdresseBAN.isPresent()){
             adresseBan = optionalAdresseBAN.get();
-        } else return;
+        } else {
+            System.out.println("Pas de résultat pour cette adresse : "+optionalAdresseBAN.get().getQuery());
+            return;
+        }
         if (adresseBan.getFeatures().size()==1) {
             String geomtryPoint = adresseBan.getFeatures().get(0).getGeometry().toString();
             responseManagerFeuille = new ResponseManagerHTTP<>();
@@ -59,11 +65,21 @@ public class FindMutation {
                 bboxOfFeuille = optionalFeuille.get().convertBboxToString();
                 getGeomutationsFromFeuille(bboxOfFeuille, adresseBan.getFeatures().get(0).getProperties().getCitycode());
             }
+        } else if (adresseBan.getFeatures().size()>1) {
+            AdresseBAN selectedAdresse = selectAdressInList(adresseBan);
+        }
+    }
+
+    private AdresseBAN selectAdressInList(AdresseBAN adresseBan) {
+        HashMap<Integer, FeatureAdresseBAN> listeOfAdress = new HashMap<>();
+        int i = 0;
+        for (FeatureAdresseBAN adresse : adresseBan.getFeatures()) {
+
         }
     }
 
     private void getGeomutationsFromFeuille(String bboxOfFeuille, String cityCode) throws URISyntaxException, IOException {
-        GestionUser gestionUser = new GestionUser();
+
         System.out.println("Pour quelle année souhaitez-vous faire une recherche ? à partir de 2010");
         String inputYear = gestionUser.promptYear();
         callAPI = new GeomutationAPI(inputYear, cityCode, bboxOfFeuille);
