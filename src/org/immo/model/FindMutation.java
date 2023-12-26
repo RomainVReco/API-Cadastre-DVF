@@ -80,9 +80,6 @@ public class FindMutation {
         for (FeatureAdresseBAN adresse : adresseBan.getFeatures()) {
             listeOfAdress.put(i, adresse);
             System.out.printf("[%d] "+adresse.showAdressLabel()+"\n",i);
-//            if (i < adresseBan.getFeatures().size()){
-//                System.out.println("#####################################");
-//            }
             i++;
         }
         String userChoice = gestionUser.promptSingleDigit("Numéro de ligne", adresseBan.getFeatures().size());
