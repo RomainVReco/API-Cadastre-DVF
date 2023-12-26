@@ -5,10 +5,7 @@ import org.immo.geojson.adresseban.FeatureAdresseBAN;
 import org.immo.geojson.feuille.Feuille;
 import org.immo.geojson.geomutation.FeatureMutation;
 import org.immo.geojson.geomutation.Geomutation;
-import org.immo.servicepublicapi.AbstractRequestAPI;
-import org.immo.servicepublicapi.AdresseAPI;
-import org.immo.servicepublicapi.FeuilleAPI;
-import org.immo.servicepublicapi.GeomutationAPI;
+import org.immo.servicepublicapi.*;
 import org.immo.userinput.GestionUser;
 
 import java.io.IOException;
@@ -36,7 +33,6 @@ public class FindMutation {
             throw new RuntimeException(e);
         }
         String bboxOfFeuille = new String();
-
     }
 
     public void getAdressFromQuery(String adresse) throws IOException, URISyntaxException {
@@ -45,7 +41,6 @@ public class FindMutation {
         Optional<AdresseBAN> optionalAdresseBAN = responseManagerAdresse.getAPIReturn(callAPI, AdresseBAN.class);
         if (optionalAdresseBAN.isEmpty()){
             System.out.println("Erreur lors de la requête de cette adresse");
-            return;
         } else getListOfAdress(optionalAdresseBAN);
     }
 
@@ -101,13 +96,19 @@ public class FindMutation {
         Optional<Geomutation> optionalGeomutation = responseManagerGeomutation.getAPIReturn(callAPI, Geomutation.class);
         if (optionalGeomutation.isPresent()) {
             geomutation = optionalGeomutation.orElse(new Geomutation());
-            System.out.println(geomutation.getNext());
-//            do {
-//
-//            }
-
             System.out.println(geomutation.showGeomutationContent());
-                setOfGeomutations.addAll(geomutation.getFeatures());
+            setOfGeomutations.addAll(geomutation.getFeatures());
+            if (geomutation.getNext() != null) {
+                do {
+                    callAPI = new NextPageAPI(geomutation.getNext());
+                    geomutation = responseManagerGeomutation.getAPIReturn(callAPI, Geomutation.class).get();
+                    System.out.println(geomutation.showGeomutationContent());
+                    setOfGeomutations.addAll(geomutation.getFeatures());
+                } while (geomutation.getNext() != null);
+            }
+
+        } else {
+            System.out.println("Pas de mutation pout cette adresse");
         }
     }
 
