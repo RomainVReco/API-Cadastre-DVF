@@ -101,6 +101,11 @@ public class FindMutation {
         Optional<Geomutation> optionalGeomutation = responseManagerGeomutation.getAPIReturn(callAPI, Geomutation.class);
         if (optionalGeomutation.isPresent()) {
             geomutation = optionalGeomutation.orElse(new Geomutation());
+            System.out.println(geomutation.getNext());
+//            do {
+//
+//            }
+
             System.out.println(geomutation.showGeomutationContent());
                 setOfGeomutations.addAll(geomutation.getFeatures());
         }
