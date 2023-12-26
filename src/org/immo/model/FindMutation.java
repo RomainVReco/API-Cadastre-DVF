@@ -47,7 +47,6 @@ public class FindMutation {
     }
 
     private void getListOfAdress(Optional<AdresseBAN> optionalAdresseBAN) throws IOException, URISyntaxException {
-        Optional<Feuille> optionalFeuille;
         String bboxOfFeuille;
         AdresseBAN adresseBan;
         if (optionalAdresseBAN.isPresent()){
@@ -57,29 +56,43 @@ public class FindMutation {
             return;
         }
         if (adresseBan.getFeatures().size()==1) {
-            String geomtryPoint = adresseBan.getFeatures().get(0).getGeometry().toString();
-            responseManagerFeuille = new ResponseManagerHTTP<>();
-            callAPI = new FeuilleAPI(geomtryPoint);
-            optionalFeuille = responseManagerFeuille.getAPIReturn(callAPI, Feuille.class);
-            if (optionalFeuille.isPresent()){
-                bboxOfFeuille = optionalFeuille.get().convertBboxToString();
-                getGeomutationsFromFeuille(bboxOfFeuille, adresseBan.getFeatures().get(0).getProperties().getCitycode());
-            }
+            String cityCode = adresseBan.getFeatures().get(0).getProperties().getCitycode();
+            String geometryPoint = adresseBan.getFeatures().get(0).getGeometry().toString();
+            bboxOfFeuille = getBboxOfFeuille(geometryPoint);
+            getGeomutationsFromFeuille(bboxOfFeuille, cityCode);
+
         } else if (adresseBan.getFeatures().size()>1) {
-            AdresseBAN selectedAdresse = selectAdressInList(adresseBan);
+            FeatureAdresseBAN selectedAdresse = selectAdressInList(adresseBan);
+            String geometryPoint = selectedAdresse.getGeometry().toString();
+            String cityCode = selectedAdresse.getProperties().getCitycode();
+            bboxOfFeuille = getBboxOfFeuille(geometryPoint);
+            getGeomutationsFromFeuille(bboxOfFeuille, cityCode);
         }
     }
 
-    private AdresseBAN selectAdressInList(AdresseBAN adresseBan) {
+    private FeatureAdresseBAN selectAdressInList(AdresseBAN adresseBan) {
         HashMap<Integer, FeatureAdresseBAN> listeOfAdress = new HashMap<>();
-        int i = 0;
+        int i = 1;
         for (FeatureAdresseBAN adresse : adresseBan.getFeatures()) {
-
+            listeOfAdress.put(i, adresse);
+            System.out.printf("Sélectionnez l'adresse exacte : "+adresse.showAdressLabel()+" [%d]\n",i);
+            if (i < adresseBan.getFeatures().size()){
+                System.out.println("#####################################\n");
+            }
+            i++;
         }
+        String userChoice = gestionUser.promptSingleDigit(adresseBan.getFeatures().size());
+        return listeOfAdress.get(Integer.parseInt(userChoice));
+    }
+
+    private String getBboxOfFeuille(String geometryPoint) throws IOException, URISyntaxException {
+        responseManagerFeuille = new ResponseManagerHTTP<>();
+        callAPI = new FeuilleAPI(geometryPoint);
+        Optional<Feuille> optionalFeuille = responseManagerFeuille.getAPIReturn(callAPI, Feuille.class);
+        return optionalFeuille.get().convertBboxToString();
     }
 
     private void getGeomutationsFromFeuille(String bboxOfFeuille, String cityCode) throws URISyntaxException, IOException {
-
         System.out.println("Pour quelle année souhaitez-vous faire une recherche ? à partir de 2010");
         String inputYear = gestionUser.promptYear();
         callAPI = new GeomutationAPI(inputYear, cityCode, bboxOfFeuille);

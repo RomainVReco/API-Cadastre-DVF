@@ -40,6 +40,29 @@ public class GestionUser {
         return userInput;
     }
 
+    public String promptSingleDigit(int listSize) {
+        Scanner scanner = new Scanner(System.in);
+        String userInput = "";
+        boolean validInput = false;
+        do {
+            String input = scanner.nextLine().toUpperCase();
+            if (input.length() <= String.valueOf(listSize).length()) {
+                userInput = input;
+                validInput = true;
+                try {
+                    Integer.valueOf(userInput);
+                } catch (NumberFormatException e) {
+                    validInput = false;
+                    System.out.println("Vous n'avez pas rentré un entier, veuiller effectuer une nouvelle saisie de 0 à "+listSize);
+                }
+            } else {
+                System.out.println("L'entier renseigné hors périmètre. Faites un choix de 0 à "+listSize);
+            }
+        } while (!validInput);
+
+        return userInput;
+    }
+
     public String promptYesNo(String prompt) {
         Scanner scanner = new Scanner(System.in);
         String userInput = "";

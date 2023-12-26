@@ -35,4 +35,8 @@ public class FeatureAdresseBAN {
                 ", properties=" + properties +
                 '}';
     }
+
+    public String showAdressLabel() {
+        return this.getProperties().getLabel();
+    }
 }
