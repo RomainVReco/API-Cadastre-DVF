@@ -7,8 +7,9 @@ public class NextPageAPI extends AbstractRequestAPI {
     URL URL;
 
     public NextPageAPI (String nextPageURL) {
+        String httpsNextPageURL = transformToHTTPS(nextPageURL);
         try {
-            URL = new URI(nextPageURL).toURL();
+            URL = new URI(httpsNextPageURL).toURL();
         } catch (MalformedURLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -18,5 +19,12 @@ public class NextPageAPI extends AbstractRequestAPI {
             } catch (IOException e) {
                 System.out.println("Pas de réponse du serveur");
             }
+    }
+
+    private String transformToHTTPS(String nextPageURL) {
+        StringBuilder sb = new StringBuilder(nextPageURL);
+        char s = 's';
+        sb.insert(4, s);
+        return sb.toString();
     }
 }
