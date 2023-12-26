@@ -15,7 +15,6 @@ public class AdresseAPI extends AbstractRequestAPI {
             String encodedQuery = new ConverterURL(query).getEncodedQuery();
             URL = new URI(URL_API+encodedQuery).toURL();
             this.conn = this.getRequestResult(this.URL);
-            System.out.println("Response code: " + conn.getResponseCode());
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
             System.out.println("Error with AdresseAPI call");

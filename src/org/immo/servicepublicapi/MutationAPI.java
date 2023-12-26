@@ -13,7 +13,6 @@ public class MutationAPI extends AbstractRequestAPI {
         URL = new URI((URL_API+idMutation)).toURL();
         System.out.println(URL);
         this.conn = this.getRequestResult(this.URL);
-        System.out.println("Response code: " + conn.getResponseCode());
     }
 }
 

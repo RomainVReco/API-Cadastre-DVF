@@ -63,6 +63,12 @@ public class ResponseManagerHTTP<T> {
                 System.out.println("Motif : " + requestAPI.getConn().getResponseMessage());
                 return false;
             }
+
+            case 504 -> {
+                System.out.println("Code retour : 504. Time out");
+                System.out.println("Motif : " + requestAPI.getConn().getResponseMessage());
+                return false;
+            }
             default -> {
                 System.out.println("Cas non prévu, il faut checker les logs");
                 throw new UnknownResponseCode("Code erreur inconnu : " + requestAPI.getConn().getResponseMessage());

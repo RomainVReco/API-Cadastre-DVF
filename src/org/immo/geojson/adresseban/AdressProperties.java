@@ -22,12 +22,16 @@ public class AdressProperties {
         private String postcode;
         @JsonProperty("citycode")
         private String citycode;
+        @JsonProperty("oldcitycode")
+        private String oldcitycode;
         @JsonProperty("x")
         private double x;
         @JsonProperty("y")
         private double y;
         @JsonProperty("city")
         private String city;
+        @JsonProperty("oldcity")
+        private String oldcity;
         @JsonProperty("district")
         private String district;
         @JsonProperty("context")
@@ -157,6 +161,22 @@ public class AdressProperties {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public String getBanId() {
+        return banId;
+    }
+
+    public void setBanId(String banId) {
+        this.banId = banId;
+    }
+
+    public String getOldcitycode() {
+        return oldcitycode;
+    }
+
+    public void setOldcitycode(String oldcitycode) {
+        this.oldcitycode = oldcitycode;
     }
 
     @Override

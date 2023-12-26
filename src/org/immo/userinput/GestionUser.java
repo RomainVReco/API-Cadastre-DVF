@@ -40,11 +40,12 @@ public class GestionUser {
         return userInput;
     }
 
-    public String promptSingleDigit(int listSize) {
+    public String promptSingleDigit(String prompt, int listSize) {
         Scanner scanner = new Scanner(System.in);
         String userInput = "";
         boolean validInput = false;
         do {
+            System.out.print(prompt+" : ");
             String input = scanner.nextLine().toUpperCase();
             if (input.length() <= String.valueOf(listSize).length()) {
                 userInput = input;

@@ -3,6 +3,7 @@ package org.immo.servicepublicapi;
 import org.immo.geojson.geomutation.Geomutation;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -20,7 +21,18 @@ public class GeomutationAPI extends AbstractRequestAPI {
         sb.append(URL_API).append(annee_mutation).append(code_insee).append(encodedQuery);
         URL = new URI(sb.toString()).toURL();
         System.out.println(URL);
-        this.conn = this.getRequestResult(this.URL);
+        boolean hasSucceed = false;
+        int numberOfTries = 0;
+        do {
+            try {
+                this.conn = this.getRequestResult(this.URL);
+                hasSucceed = true;
+            } catch (SocketException e) {
+                System.out.println("Pas de réponse du serveur");
+                hasSucceed = false;
+                numberOfTries++;
+            }
+        } while ((!hasSucceed) || (numberOfTries > 3));
         System.out.println("Response code: " + conn.getResponseCode());
     }
 

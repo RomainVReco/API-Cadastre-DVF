@@ -43,7 +43,10 @@ public class FindMutation {
         callAPI = new AdresseAPI(adresse);
         responseManagerAdresse = new ResponseManagerHTTP<>();
         Optional<AdresseBAN> optionalAdresseBAN = responseManagerAdresse.getAPIReturn(callAPI, AdresseBAN.class);
-        getListOfAdress(optionalAdresseBAN);
+        if (optionalAdresseBAN.isEmpty()){
+            System.out.println("Erreur lors de la requête de cette adresse");
+            return;
+        } else getListOfAdress(optionalAdresseBAN);
     }
 
     private void getListOfAdress(Optional<AdresseBAN> optionalAdresseBAN) throws IOException, URISyntaxException {
@@ -73,15 +76,16 @@ public class FindMutation {
     private FeatureAdresseBAN selectAdressInList(AdresseBAN adresseBan) {
         HashMap<Integer, FeatureAdresseBAN> listeOfAdress = new HashMap<>();
         int i = 1;
+        System.out.println("\nSélectionnez l'adresse exacte : ");
         for (FeatureAdresseBAN adresse : adresseBan.getFeatures()) {
             listeOfAdress.put(i, adresse);
-            System.out.printf("Sélectionnez l'adresse exacte : "+adresse.showAdressLabel()+" [%d]\n",i);
-            if (i < adresseBan.getFeatures().size()){
-                System.out.println("#####################################\n");
-            }
+            System.out.printf("[%d] "+adresse.showAdressLabel()+"\n",i);
+//            if (i < adresseBan.getFeatures().size()){
+//                System.out.println("#####################################");
+//            }
             i++;
         }
-        String userChoice = gestionUser.promptSingleDigit(adresseBan.getFeatures().size());
+        String userChoice = gestionUser.promptSingleDigit("Numéro de ligne", adresseBan.getFeatures().size());
         return listeOfAdress.get(Integer.parseInt(userChoice));
     }
 
