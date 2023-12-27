@@ -1,11 +1,9 @@
 package TestJackson;
 
-import org.immo.exceptions.UnknownResponseCode;
 import org.immo.geojson.geomutation.FeatureMutation;
-import org.immo.model.FindMutation;
+import org.immo.model.FindMutationFeuille;
 import org.immo.userinput.GestionUser;
-import java.io.IOException;
-import java.net.URISyntaxException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,7 +14,7 @@ public class MainJackson {
     public static void main(String[] args) {
         GestionUser gu = new GestionUser();
         String inputStreet = gu.promptString("Donnez une adresse");
-        FindMutation fm = new FindMutation(inputStreet);
+        FindMutationFeuille fm = new FindMutationFeuille(inputStreet);
         System.out.println(fm.getSetOfGeomutations().size());
 
         System.out.println("Je lance le stream\n");
