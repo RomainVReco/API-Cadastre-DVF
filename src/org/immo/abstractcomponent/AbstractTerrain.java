@@ -88,8 +88,8 @@ public abstract class AbstractTerrain<T>{
                 bbox.append(point).append(",");
             }
         } catch (NullPointerException e){
-            System.out.println("Pas de résultat");
-            bbox.append("empty ");
+            System.out.println("Pas de résultat pour la conversion de la Bbox en String");
+            bbox.append("empty");
         }
 
         return bbox.substring(0, bbox.length()-1);
