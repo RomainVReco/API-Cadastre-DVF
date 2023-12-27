@@ -83,9 +83,15 @@ public abstract class AbstractTerrain<T>{
 
     public String convertBboxToString(){
         StringBuilder bbox = new StringBuilder();
-        for (Double point: this.getBbox()) {
-            bbox.append(point).append(",");
+        try {
+            for (Double point: this.getBbox()) {
+                bbox.append(point).append(",");
+            }
+        } catch (NullPointerException e){
+            System.out.println("Pas de résultat");
+            bbox.append("empty ");
         }
+
         return bbox.substring(0, bbox.length()-1);
     }
 

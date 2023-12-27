@@ -28,20 +28,22 @@ public class FindMutationFeuille extends FindMutation {
 
     public FindMutationFeuille(String query) {
         try {
-            getAdressFromQuery(query);
+            getAdressFromQuery();
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
         String bboxOfFeuille = new String();
     }
 
-    public void getAdressFromQuery(String adresse) throws IOException, URISyntaxException {
-        callAPI = new AdresseAPI(adresse);
+    public AdresseBAN getAdressFromQuery() throws IOException, URISyntaxException {
+        String query = gestionUser.promptString("Donner une adresse : ");
+        callAPI = new AdresseAPI(query);
         responseManagerAdresse = new ResponseManagerHTTP<>();
         Optional<AdresseBAN> optionalAdresseBAN = responseManagerAdresse.getAPIReturn(callAPI, AdresseBAN.class);
         if (optionalAdresseBAN.isEmpty()){
             System.out.println("Erreur lors de la requête de cette adresse");
         } else getListOfAdress(optionalAdresseBAN);
+        return null;
     }
 
     private void getListOfAdress(Optional<AdresseBAN> optionalAdresseBAN) throws IOException, URISyntaxException {
@@ -57,18 +59,18 @@ public class FindMutationFeuille extends FindMutation {
             String cityCode = adresseBan.getFeatures().get(0).getProperties().getCitycode();
             String geometryPoint = adresseBan.getFeatures().get(0).getGeometry().toString();
             bboxOfFeuille = getBboxOfFeuille(geometryPoint);
-            getGeomutationsFromFeuille(bboxOfFeuille, cityCode);
+            getGeomutationsFromTerrain(bboxOfFeuille, cityCode);
 
         } else if (adresseBan.getFeatures().size()>1) {
             FeatureAdresseBAN selectedAdresse = selectAdressInList(adresseBan);
             String geometryPoint = selectedAdresse.getGeometry().toString();
             String cityCode = selectedAdresse.getProperties().getCitycode();
             bboxOfFeuille = getBboxOfFeuille(geometryPoint);
-            getGeomutationsFromFeuille(bboxOfFeuille, cityCode);
+            getGeomutationsFromTerrain(bboxOfFeuille, cityCode);
         }
     }
 
-    private FeatureAdresseBAN selectAdressInList(AdresseBAN adresseBan) {
+    public FeatureAdresseBAN selectAdressInList(AdresseBAN adresseBan) {
         HashMap<Integer, FeatureAdresseBAN> listeOfAdress = new HashMap<>();
         int i = 1;
         System.out.println("\nSélectionnez l'adresse exacte : ");
@@ -88,40 +90,4 @@ public class FindMutationFeuille extends FindMutation {
         return optionalFeuille.get().convertBboxToString();
     }
 
-    private void getGeomutationsFromFeuille(String bboxOfFeuille, String cityCode) throws URISyntaxException, IOException {
-        System.out.println("Pour quelle année souhaitez-vous faire une recherche ? à partir de 2010");
-        String inputYear = gestionUser.promptYear();
-        callAPI = new GeomutationAPI(inputYear, cityCode, bboxOfFeuille);
-        responseManagerGeomutation = new ResponseManagerHTTP<>();
-        Optional<Geomutation> optionalGeomutation = responseManagerGeomutation.getAPIReturn(callAPI, Geomutation.class);
-        if (optionalGeomutation.isPresent()) {
-            geomutation = optionalGeomutation.orElse(new Geomutation());
-            System.out.println(geomutation.showGeomutationContent());
-            setOfGeomutations.addAll(geomutation.getFeatures());
-            while (geomutation.getNext() != null) {
-                    callAPI = new NextPageAPI(geomutation.getNext());
-                    geomutation = responseManagerGeomutation.getAPIReturn(callAPI, Geomutation.class).get();
-                    System.out.println(geomutation.showGeomutationContent());
-                    setOfGeomutations.addAll(geomutation.getFeatures());
-            }
-        } else {
-            System.out.println("Pas de mutation pout cette adresse");
-        }
-    }
-
-    public Set<FeatureMutation> getSetOfGeomutations() {
-        return setOfGeomutations;
-    }
-
-    public void setSetOfGeomutations(Set<FeatureMutation> setOfGeomutations) {
-        this.setOfGeomutations = setOfGeomutations;
-    }
-
-    public Geomutation getGeomutation() {
-        return geomutation;
-    }
-
-    public void setGeomutation(Geomutation geomutation) {
-        this.geomutation = geomutation;
-    }
 }
