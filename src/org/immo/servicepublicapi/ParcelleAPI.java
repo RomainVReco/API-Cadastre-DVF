@@ -11,7 +11,7 @@ public class ParcelleAPI extends AbstractRequestAPI{
     String parameters;
     public ParcelleAPI(String query, String parameters) throws IOException, URISyntaxException {
         this.parameters = parameters;
-        String preparedParameter = parameters+"=";
+        String preparedParameter = parameters;
         String encodedQuery = new ConverterURL(query).getEncodedQuery();
         URL = new URI(URL_API+preparedParameter+encodedQuery).toURL();
         this.conn = this.getRequestResult(this.URL);

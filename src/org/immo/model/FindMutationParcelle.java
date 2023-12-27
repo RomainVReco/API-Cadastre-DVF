@@ -37,7 +37,7 @@ public class FindMutationParcelle extends FindMutation {
 
     private String getBboxFromParcelle(String geometryPoint) throws IOException, URISyntaxException {
         ResponseManagerHTTP<Parcelle> responseManagerParcelle = new ResponseManagerHTTP<>();
-        callAPI = new ParcelleAPI(geometryPoint, "geom");
+        callAPI = new ParcelleAPI(geometryPoint, "geom=");
         Optional<Parcelle> optionalParcelle = responseManagerParcelle.getAPIReturn(callAPI, Parcelle.class);
         if (optionalParcelle.isPresent()){
             return optionalParcelle.get().convertBboxToString();
