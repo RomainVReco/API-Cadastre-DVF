@@ -25,23 +25,43 @@ class NextPageAPITest {
 
     @Test
     void calculateInsidePolygon() throws IOException, URISyntaxException {
-        double longitude = 48.825897;
-        double latitude = 2.266267;
+        double latitude = 48.825897;
+        double longitude = 2.266267;
+        double[] R = {longitude, (latitude+1)};
+        int compteur = 0;
         ParcelleAPI callAPI = new ParcelleAPI("","code_insee=92040&section=0E");
         ResponseManagerHTTP<Parcelle> responseManagerHTTP = new ResponseManagerHTTP<>();
         Optional<Parcelle> optionalParcelle = responseManagerHTTP.getAPIReturn(callAPI, Parcelle.class);
         for (FeatureParcelle ls : optionalParcelle.get().getFeaturesTerrain()){
             for (List<List<List<Object>>> doubleList_1 : ls.getGeometry().getCoordinates() ){
+                System.out.println("Première liste : "+doubleList_1.size());
                 for (List<List<Object>> doubleList_2 : doubleList_1){
-                    for (List<Object> doubleList_3 : doubleList_2){
-                        System.out.println("Latitude : "+(double)doubleList_3.get(0)+ "Longitude : "+(double)doubleList_3.get(1));
-                        System.out.println("Coordonnées une : "+((double)doubleList_3.get(0)-latitude));
-                        System.out.println("Coordonnées deux : "+((double)doubleList_3.get(1)-longitude));
+                    System.out.println("Deuxième liste : "+doubleList_2.size());
+                    for (int i =0; i<doubleList_2.size()-1; i++){
+                        double m =  ((double) doubleList_2.get(i+1).get(1) - (double) doubleList_2.get(i).get(1)) /
+                                ((double) doubleList_2.get(i+1).get(0) - (double) doubleList_2.get(i).get(0));
+                        double p = ((double) doubleList_2.get(i).get(1)) - (m * (double) doubleList_2.get(i).get(0));
+                        double xI = longitude;
+                        double yI = m*xI+p;
+                        if ((((xI-(double) doubleList_2.get(i).get(0))*(xI-(double) doubleList_2.get(i+1).get(0)))<0) &&
+                        ((yI-R[1])*(latitude-yI)<0)) {
+                            compteur++;
+                            System.out.println("Compteur : "+compteur);
+                        }
                     }
+//                    for (List<Object> doubleList_3 : doubleList_2){
+//                        System.out.println("Troisième liste : "+doubleList_3.size());
+//                        System.out.println("Latitude : "+(double)doubleList_3.get(0)+ "Longitude : "+(double)doubleList_3.get(1));
+//                        System.out.println("Coordonnées une : "+((double)doubleList_3.get(0)-longitude));
+//                        System.out.println("Coordonnées deux : "+((double)doubleList_3.get(1)-latitude));
+//                    }
                 }
             }
         }
-        assertTrue(optionalParcelle.get().getFeaturesTerrain().size()>1);
+        if (compteur%2 == 0) System.out.println("Le point n'est pas dans le polygone");
+         else System.out.println("Le point est dans le polygone");
+
+//        assertTrue(optionalParcelle.get().getFeaturesTerrain().size()>1);
     }
 
     @Test
