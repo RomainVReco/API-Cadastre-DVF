@@ -35,17 +35,18 @@ class NextPageAPITest {
         Optional<Parcelle> optionalParcelle = responseManagerHTTP.getAPIReturn(callAPI, Parcelle.class);
         for (FeatureParcelle ls : optionalParcelle.get().getFeaturesTerrain()){
             for (List<List<List<Object>>> doubleList_1 : ls.getGeometry().getCoordinates() ){
-                System.out.println("Première liste : "+doubleList_1.size());
+                System.out.println("Numéro de parcelle : "+ls.getTerrainProperties().getIdu());
+
                 for (List<List<Object>> doubleList_2 : doubleList_1){
-                    System.out.println("Deuxième liste : "+doubleList_2.size());
+                    System.out.println("Nombre points polygone : "+doubleList_2.size());
                     for (int i =0; i<doubleList_2.size()-1; i++){
                         double m =  ((double) doubleList_2.get(i+1).get(1) - (double) doubleList_2.get(i).get(1)) /
                                 ((double) doubleList_2.get(i+1).get(0) - (double) doubleList_2.get(i).get(0));
                         double p = ((double) doubleList_2.get(i).get(1)) - (m * (double) doubleList_2.get(i).get(0));
                         double xI = longitude;
                         double yI = m*xI+p;
-                        if ((((xI-(double) doubleList_2.get(i).get(0))*(xI-(double) doubleList_2.get(i+1).get(0)))<0) &&
-                        ((yI-R[1])*(latitude-yI)<0)) {
+                        if ((((xI-(double) doubleList_2.get(i).get(0))*(xI-(double) doubleList_2.get(i+1).get(0)))>0) &&
+                        ((yI-R[1])*(latitude-yI)>0)) {
                             compteur++;
                             System.out.println("Compteur : "+compteur);
                         }
@@ -56,11 +57,12 @@ class NextPageAPITest {
 //                        System.out.println("Coordonnées une : "+((double)doubleList_3.get(0)-longitude));
 //                        System.out.println("Coordonnées deux : "+((double)doubleList_3.get(1)-latitude));
 //                    }
+                    if (compteur%2 == 0) System.out.println("Le point n'est pas dans le polygone");
+                    else System.out.println("Le point est dans le polygone");
+                    compteur =0;
                 }
             }
         }
-        if (compteur%2 == 0) System.out.println("Le point n'est pas dans le polygone");
-         else System.out.println("Le point est dans le polygone");
 
 //        assertTrue(optionalParcelle.get().getFeaturesTerrain().size()>1);
     }
