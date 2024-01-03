@@ -7,8 +7,8 @@ import java.net.URL;
 
 public abstract class AbstractRequestAPI {
     Config config;
-
     HttpsURLConnection conn;
+    URL URL;
 
     public AbstractRequestAPI() {
 

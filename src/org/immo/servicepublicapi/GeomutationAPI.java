@@ -11,7 +11,6 @@ import java.util.List;
 
 public class GeomutationAPI extends AbstractRequestAPI {
     final String URL_API = "https://apidf-preprod.cerema.fr/dvf_opendata/geomutations/?";
-    URL URL;
 
     public GeomutationAPI (String anneeMutation, String codeInsee, String bbox) throws URISyntaxException, IOException {
         StringBuilder sb = new StringBuilder();

@@ -8,7 +8,6 @@ import java.net.URL;
 public class AdresseAPI extends AbstractRequestAPI {
 
     final String URL_API = "https://api-adresse.data.gouv.fr/search/?q=";
-    URL URL;
 
     public AdresseAPI(String query) {
         try {

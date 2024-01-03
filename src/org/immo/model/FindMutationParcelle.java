@@ -4,6 +4,7 @@ import org.immo.exceptions.NoParcelleException;
 import org.immo.geojson.adresseban.AdresseBAN;
 import org.immo.geojson.adresseban.FeatureAdresseBAN;
 import org.immo.geojson.parcelle.Parcelle;
+import org.immo.servicepublicapi.CommuneAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,21 +23,25 @@ public class FindMutationParcelle extends FindMutation {
             } else hasFoundAddress = false;
         }
         String geometryPoint = getGeomtryPointFromAdress(adressToLook);
-        // A modifier pour récupérer le codePostal et non le cityCode
-        String cityCode = getCityCodeFromAdress(adressToLook);
-        // créer une méthode pour récupérer
-//        String codeInsee = getCodeInseeFromAddress(cityCode);
+        String postCode = getCityCodeFromAdress(adressToLook);
+        String codeInsee = getCodeInseeFromPostCode(postCode);
         String bbox = getBboxFromParcelle(geometryPoint);
         if (bbox.equals("empty")) {
             System.out.println("Oups, je suis vide");
-            String section = getNearestSection(cityCode, geometryPoint);
-            bbox = getParecelleBboxFromSection(cityCode, section, geometryPoint);
+            String section = getNearestSection(codeInsee, geometryPoint);
+            bbox = getParecelleBboxFromSection(codeInsee, section, geometryPoint);
         }
-        getGeomutationsFromTerrain(bbox, cityCode);
+        getGeomutationsFromTerrain(bbox, codeInsee);
+    }
+
+    private String getCodeInseeFromPostCode(String postCode) throws URISyntaxException, IOException {
+        callAPI = new CommuneAPI(postCode);
+        String jsonResponse = callAPI.readReponseFromAPI(callAPI.getConn());
+        return jsonResponse.substring(38,43);
     }
 
     private String getCityCodeFromAdress(FeatureAdresseBAN adressToLook) {
-        return adressToLook.getProperties().getCitycode();
+        return adressToLook.getProperties().getPostcode();
     }
 
     private String getBboxFromParcelle(String geometryPoint) throws IOException, URISyntaxException {
