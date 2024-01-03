@@ -7,6 +7,7 @@ import org.immo.geojson.feuille.Feuille;
 import org.immo.geojson.geomutation.FeatureMutation;
 import org.immo.geojson.geomutation.Geomutation;
 import org.immo.geojson.parcelle.FeatureParcelle;
+import org.immo.geojson.parcelle.OrderByDistanceReference;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.geojson.parcelle.SimplifiedParcelle;
 import org.immo.servicepublicapi.*;
@@ -76,27 +77,26 @@ public abstract class FindMutation {
     }
 
     public String getNearestSection(String cityCode, String geometryPoint) throws IOException, URISyntaxException, NoParcelleException {
-        callAPI = new FeuilleAPI(cityCode, geometryPoint);
+        callAPI = new FeuilleAPI(cityCode, geometryPoint, 2);
         ResponseManagerHTTP<Feuille> feuilleResponseManagerHTTP = new ResponseManagerHTTP<>();
         Optional<Feuille> optionalFeuille = feuilleResponseManagerHTTP.getAPIReturn(callAPI, Feuille.class);
         if (optionalFeuille.isPresent() && optionalFeuille.get().getNumberReturned()!=0) {
-            return optionalFeuille.get().convertBboxToString();
+            return optionalFeuille.get().getFeaturesTerrain().get(0).getTerrainProperties().getSection();
         } else throw new NoParcelleException("Pas de section trouvée");
     }
 
     public String getParecelleBboxFromSection(String cityCode, String section, String geometryPoint) throws IOException, URISyntaxException, NoParcelleException {
-        callAPI = new ParcelleAPI(cityCode, section);
+        callAPI = new ParcelleAPI(cityCode, section, 2);
         ResponseManagerHTTP<Parcelle> parcelleResponseManagerHTTP = new ResponseManagerHTTP<>();
         Optional<Parcelle> optionalParcelle = parcelleResponseManagerHTTP.getAPIReturn(callAPI, Parcelle.class);
         if (optionalParcelle.isPresent()) {
             Parcelle parcelleToReview = optionalParcelle.get();
-            Parcelle parcelle = checkForNearestParcelle(parcelleToReview, geometryPoint);
-            return parcelle.convertBboxToString();
+            return checkForNearestParcelle(parcelleToReview, geometryPoint);
         } else throw new NoParcelleException("Pas de parcelle trouvée");
 
     }
 
-    private Parcelle checkForNearestParcelle(Parcelle parcelleToReview, String geometryPoint) {
+    private String checkForNearestParcelle(Parcelle parcelleToReview, String geometryPoint) {
         List<Double> longLat = new ArrayList<>();
         longLat = extractLatitudeLongitude(geometryPoint);
         List<SimplifiedParcelle> simplifiedParcelleList = new ArrayList<>();
@@ -105,6 +105,7 @@ public abstract class FindMutation {
             subparcelle.setBbox(featureTerrain.getTerrainProperties().getBbox());
             subparcelle.setGeometryPolygon(featureTerrain.getGeometry());
             subparcelle.setId(featureTerrain.getTerrainProperties().getIdu());
+            subparcelle.setConvertedBbox(featureTerrain.getTerrainProperties().convertBboxToString());
             // racine((xb-xa)²+(yb-ya)²)
             double distanceMinEucliX = Math.pow(subparcelle.getBbox().get(0)-longLat.get(0),2);
             double distanceMinEucliY = Math.pow(subparcelle.getBbox().get(1)-longLat.get(1),2);
@@ -116,6 +117,9 @@ public abstract class FindMutation {
             subparcelle.setDistanceFromReference(Math.abs(distanceMinLongitude)+Math.abs(distanceMaxLongitude));
             simplifiedParcelleList.add(subparcelle);
         }
+        Collections.sort(simplifiedParcelleList, new OrderByDistanceReference());
+        System.out.println(simplifiedParcelleList.getFirst().toString());
+        return simplifiedParcelleList.getFirst().getConvertedBbox();
 
 
 
@@ -123,7 +127,7 @@ public abstract class FindMutation {
 
     private List<Double> extractLatitudeLongitude(String geometryPoint) {
         int firstBrace = geometryPoint.indexOf("[");
-        String removeFirstBrace = geometryPoint.substring(firstBrace);
+        String removeFirstBrace = geometryPoint.substring(firstBrace+1);
         int secondBrace = removeFirstBrace.indexOf("]");
         String removeSecondBrace = removeFirstBrace.substring(0, secondBrace);
         String[] coordinatesToParse = removeSecondBrace.split(",");

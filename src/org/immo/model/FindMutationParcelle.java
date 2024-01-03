@@ -16,19 +16,23 @@ public class FindMutationParcelle extends FindMutation {
         FeatureAdresseBAN adressToLook = new FeatureAdresseBAN() ;
         while (!hasFoundAddress){
             AdresseBAN listOfAdress = getAdressFromQuery();
-            if (!listOfAdress.getFeatures().isEmpty()){
+            if (listOfAdress.getFeatures().size() !=0){
                 adressToLook = selectAdressInList(listOfAdress);
                 hasFoundAddress = true;
             } else hasFoundAddress = false;
         }
         String geometryPoint = getGeomtryPointFromAdress(adressToLook);
+        // A modifier pour récupérer le codePostal et non le cityCode
         String cityCode = getCityCodeFromAdress(adressToLook);
+        // créer une méthode pour récupérer
+//        String codeInsee = getCodeInseeFromAddress(cityCode);
         String bbox = getBboxFromParcelle(geometryPoint);
         if (bbox.equals("empty")) {
+            System.out.println("Oups, je suis vide");
             String section = getNearestSection(cityCode, geometryPoint);
             bbox = getParecelleBboxFromSection(cityCode, section, geometryPoint);
-            System.exit(9);
-        } else getGeomutationsFromTerrain(bbox, cityCode);
+        }
+        getGeomutationsFromTerrain(bbox, cityCode);
     }
 
     private String getCityCodeFromAdress(FeatureAdresseBAN adressToLook) {

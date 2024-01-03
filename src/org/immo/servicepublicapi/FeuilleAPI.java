@@ -21,6 +21,15 @@ public class FeuilleAPI extends AbstractRequestAPI {
         this.conn = this.getRequestResult(this.URL);
     }
 
+    public FeuilleAPI(String codeInsee, String geometryPoint, int number) throws IOException, URISyntaxException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("code_insee=").append(codeInsee).append("&");
+        String encodedQuery = new ConverterURL(geometryPoint).getEncodedQuery();
+        sb.append("geom=").append(encodedQuery);
+        URL = new URI(URL_API+ sb).toURL();
+        this.conn = this.getRequestResult(this.URL);
+    }
+
     public FeuilleAPI(String query) throws IOException, URISyntaxException {
         StringBuilder sb = new StringBuilder();
         String encodedQuery = new ConverterURL(query).getEncodedQuery();
