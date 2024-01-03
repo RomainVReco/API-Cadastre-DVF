@@ -6,15 +6,15 @@ import org.immo.geojson.adresseban.FeatureAdresseBAN;
 import org.immo.geojson.feuille.Feuille;
 import org.immo.geojson.geomutation.FeatureMutation;
 import org.immo.geojson.geomutation.Geomutation;
+import org.immo.geojson.parcelle.FeatureParcelle;
+import org.immo.geojson.parcelle.Parcelle;
+import org.immo.geojson.parcelle.SimplifiedParcelle;
 import org.immo.servicepublicapi.*;
 import org.immo.userinput.GestionUser;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public abstract class FindMutation {
     protected AbstractRequestAPI callAPI;
@@ -79,13 +79,58 @@ public abstract class FindMutation {
         callAPI = new FeuilleAPI(cityCode, geometryPoint);
         ResponseManagerHTTP<Feuille> feuilleResponseManagerHTTP = new ResponseManagerHTTP<>();
         Optional<Feuille> optionalFeuille = feuilleResponseManagerHTTP.getAPIReturn(callAPI, Feuille.class);
-        if (optionalFeuille.isPresent() & optionalFeuille.get().getNumberReturned()!=0) {
+        if (optionalFeuille.isPresent() && optionalFeuille.get().getNumberReturned()!=0) {
             return optionalFeuille.get().convertBboxToString();
         } else throw new NoParcelleException("Pas de section trouvée");
     }
 
-    public String getParecelleBboxFromSection(String cityCode, String section) {
+    public String getParecelleBboxFromSection(String cityCode, String section, String geometryPoint) throws IOException, URISyntaxException, NoParcelleException {
+        callAPI = new ParcelleAPI(cityCode, section);
+        ResponseManagerHTTP<Parcelle> parcelleResponseManagerHTTP = new ResponseManagerHTTP<>();
+        Optional<Parcelle> optionalParcelle = parcelleResponseManagerHTTP.getAPIReturn(callAPI, Parcelle.class);
+        if (optionalParcelle.isPresent()) {
+            Parcelle parcelleToReview = optionalParcelle.get();
+            Parcelle parcelle = checkForNearestParcelle(parcelleToReview, geometryPoint);
+            return parcelle.convertBboxToString();
+        } else throw new NoParcelleException("Pas de parcelle trouvée");
 
+    }
+
+    private Parcelle checkForNearestParcelle(Parcelle parcelleToReview, String geometryPoint) {
+        List<Double> longLat = new ArrayList<>();
+        longLat = extractLatitudeLongitude(geometryPoint);
+        List<SimplifiedParcelle> simplifiedParcelleList = new ArrayList<>();
+        for (FeatureParcelle featureTerrain : parcelleToReview.getFeaturesTerrain()) {
+            SimplifiedParcelle subparcelle = new SimplifiedParcelle();
+            subparcelle.setBbox(featureTerrain.getTerrainProperties().getBbox());
+            subparcelle.setGeometryPolygon(featureTerrain.getGeometry());
+            subparcelle.setId(featureTerrain.getTerrainProperties().getIdu());
+            // racine((xb-xa)²+(yb-ya)²)
+            double distanceMinEucliX = Math.pow(subparcelle.getBbox().get(0)-longLat.get(0),2);
+            double distanceMinEucliY = Math.pow(subparcelle.getBbox().get(1)-longLat.get(1),2);
+            double distanceMinLongitude = Math.sqrt(distanceMinEucliX+distanceMinEucliY);
+
+            double distanceMaxEucliX = Math.pow(subparcelle.getBbox().get(2)-longLat.get(0),2);
+            double distanceMaxEucliY = Math.pow(subparcelle.getBbox().get(3)-longLat.get(1),2);
+            double distanceMaxLongitude = Math.sqrt(distanceMaxEucliX+distanceMaxEucliY);
+            subparcelle.setDistanceFromReference(Math.abs(distanceMinLongitude)+Math.abs(distanceMaxLongitude));
+            simplifiedParcelleList.add(subparcelle);
+        }
+
+
+
+    }
+
+    private List<Double> extractLatitudeLongitude(String geometryPoint) {
+        int firstBrace = geometryPoint.indexOf("[");
+        String removeFirstBrace = geometryPoint.substring(firstBrace);
+        int secondBrace = removeFirstBrace.indexOf("]");
+        String removeSecondBrace = removeFirstBrace.substring(0, secondBrace);
+        String[] coordinatesToParse = removeSecondBrace.split(",");
+        List<Double> doubleList = new ArrayList<>();
+        doubleList.add(Double.valueOf(coordinatesToParse[0]));
+        doubleList.add(Double.valueOf(coordinatesToParse[1]));
+        return doubleList;
     }
 
     public AbstractRequestAPI getCallAPI() {

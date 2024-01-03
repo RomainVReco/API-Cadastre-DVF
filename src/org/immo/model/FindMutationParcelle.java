@@ -26,7 +26,7 @@ public class FindMutationParcelle extends FindMutation {
         String bbox = getBboxFromParcelle(geometryPoint);
         if (bbox.equals("empty")) {
             String section = getNearestSection(cityCode, geometryPoint);
-            bbox = getParecelleBboxFromSection(cityCode, section);
+            bbox = getParecelleBboxFromSection(cityCode, section, geometryPoint);
             System.exit(9);
         } else getGeomutationsFromTerrain(bbox, cityCode);
     }
