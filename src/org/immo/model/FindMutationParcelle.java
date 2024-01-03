@@ -12,11 +12,11 @@ import java.util.Optional;
 public class FindMutationParcelle extends FindMutation {
     boolean hasFoundAddress = false;
 
-    public FindMutationParcelle () throws IOException, URISyntaxException {
+    public FindMutationParcelle () throws IOException, URISyntaxException, NoParcelleException {
         FeatureAdresseBAN adressToLook = new FeatureAdresseBAN() ;
         while (!hasFoundAddress){
             AdresseBAN listOfAdress = getAdressFromQuery();
-            if (listOfAdress.getFeatures().size()>0){
+            if (!listOfAdress.getFeatures().isEmpty()){
                 adressToLook = selectAdressInList(listOfAdress);
                 hasFoundAddress = true;
             } else hasFoundAddress = false;
@@ -24,10 +24,10 @@ public class FindMutationParcelle extends FindMutation {
         String geometryPoint = getGeomtryPointFromAdress(adressToLook);
         String cityCode = getCityCodeFromAdress(adressToLook);
         String bbox = getBboxFromParcelle(geometryPoint);
-        if (bbox.equals("empty")) try {
-            throw new NoParcelleException("Pas de parcelle trouvée");
-        } catch (NoParcelleException e) {
-            e.printStackTrace();
+        if (bbox.equals("empty")) {
+            String section = getNearestSection(cityCode, geometryPoint);
+            bbox = getParecelleBboxFromSection(cityCode, section);
+            System.exit(9);
         } else getGeomutationsFromTerrain(bbox, cityCode);
     }
 
@@ -39,7 +39,7 @@ public class FindMutationParcelle extends FindMutation {
         ResponseManagerHTTP<Parcelle> responseManagerParcelle = new ResponseManagerHTTP<>();
         callAPI = new ParcelleAPI(geometryPoint, "geom=");
         Optional<Parcelle> optionalParcelle = responseManagerParcelle.getAPIReturn(callAPI, Parcelle.class);
-        if (optionalParcelle.isPresent()){
+        if (optionalParcelle.isPresent()& optionalParcelle.get().getNumberReturned()!=0){
             return optionalParcelle.get().convertBboxToString();
         } else return "empty";
     }

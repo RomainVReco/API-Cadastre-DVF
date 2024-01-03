@@ -1,7 +1,9 @@
 package org.immo.model;
 
+import org.immo.exceptions.NoParcelleException;
 import org.immo.geojson.adresseban.AdresseBAN;
 import org.immo.geojson.adresseban.FeatureAdresseBAN;
+import org.immo.geojson.feuille.Feuille;
 import org.immo.geojson.geomutation.FeatureMutation;
 import org.immo.geojson.geomutation.Geomutation;
 import org.immo.servicepublicapi.*;
@@ -71,6 +73,19 @@ public abstract class FindMutation {
         } else {
             System.out.println("Pas de mutation pout cette adresse");
         }
+    }
+
+    public String getNearestSection(String cityCode, String geometryPoint) throws IOException, URISyntaxException, NoParcelleException {
+        callAPI = new FeuilleAPI(cityCode, geometryPoint);
+        ResponseManagerHTTP<Feuille> feuilleResponseManagerHTTP = new ResponseManagerHTTP<>();
+        Optional<Feuille> optionalFeuille = feuilleResponseManagerHTTP.getAPIReturn(callAPI, Feuille.class);
+        if (optionalFeuille.isPresent() & optionalFeuille.get().getNumberReturned()!=0) {
+            return optionalFeuille.get().convertBboxToString();
+        } else throw new NoParcelleException("Pas de section trouvée");
+    }
+
+    public String getParecelleBboxFromSection(String cityCode, String section) {
+
     }
 
     public AbstractRequestAPI getCallAPI() {
