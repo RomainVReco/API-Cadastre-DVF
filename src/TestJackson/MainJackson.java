@@ -16,29 +16,27 @@ import java.util.stream.Stream;
 public class MainJackson {
 
     public static void main(String[] args) {
-//        GestionUser gu = new GestionUser();
-//        String inputStreet = gu.promptString("Donnez une adresse");
-//        FindMutationFeuille fm = new FindMutationFeuille(inputStreet);
-//        System.out.println(fm.getSetOfGeomutations().size());
-//
-//        System.out.println("Je lance le stream\n");
-//        Stream<FeatureMutation> fmit = fm.getSetOfGeomutations().stream();
-//        List<FeatureMutation> listOfFiltered = fmit
-//                .filter(x -> x.getGeomutationPoperties().getlIdpar().contains("920400000I0045"))
-//                .filter(x -> x.getGeomutationPoperties().isVefa())
-//                .collect(Collectors.toList());
-//
-//        System.out.println("Fin du Stream et début de la liste de lecture \n");
-//        System.out.println(listOfFiltered.size()+" achats VEFA parcelle 0I-45");
-//        for (FeatureMutation tg : listOfFiltered){
-//            System.out.println(tg.toString());
-//        }
+        FindMutationFeuille fm = new FindMutationFeuille();
+        System.out.println(fm.getSetOfGeomutations().size());
 
-        try {
-            FindMutationParcelle findMutationParcelle = new FindMutationParcelle();
-        } catch (IOException | URISyntaxException | NoParcelleException e) {
-            throw new RuntimeException(e);
+        System.out.println("Je lance le stream\n");
+        Stream<FeatureMutation> fmit = fm.getSetOfGeomutations().stream();
+        List<FeatureMutation> listOfFiltered = fmit
+                .filter(x -> x.getGeomutationPoperties().getlIdpar().contains("920400000I0045"))
+                .filter(x -> x.getGeomutationPoperties().isVefa())
+                .collect(Collectors.toList());
+
+        System.out.println("Fin du Stream et début de la liste de lecture \n");
+        System.out.println(listOfFiltered.size()+" achats VEFA parcelle 0I-45");
+        for (FeatureMutation tg : listOfFiltered){
+            System.out.println(tg.toString());
         }
+
+//        try {
+//            FindMutationParcelle findMutationParcelle = new FindMutationParcelle();
+//        } catch (IOException | URISyntaxException | NoParcelleException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 }

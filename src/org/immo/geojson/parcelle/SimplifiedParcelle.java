@@ -10,6 +10,7 @@ public class SimplifiedParcelle {
     private GeometryPolygon geometryPolygon;
     private List<Double> bbox ;
     private double distanceFromReference;
+    private String convertedBbox;
 
     public String getId() {
         return id;
@@ -43,18 +44,34 @@ public class SimplifiedParcelle {
         this.distanceFromReference = distanceFromReference;
     }
 
+    public String getConvertedBbox() {
+        return convertedBbox;
+    }
+
+    public void setConvertedBbox(String convertedBbox) {
+        this.convertedBbox = convertedBbox;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SimplifiedParcelle that = (SimplifiedParcelle) o;
-        return Double.compare(distanceFromReference, that.distanceFromReference) == 0 && Objects.equals(id, that.id)
-                && Objects.equals(geometryPolygon, that.geometryPolygon)
-                && Objects.equals(bbox, that.bbox);
+        return Double.compare(distanceFromReference, that.distanceFromReference) == 0
+                && Objects.equals(id, that.id) && Objects.equals(geometryPolygon, that.geometryPolygon)
+                && Objects.equals(bbox, that.bbox) && Objects.equals(convertedBbox, that.convertedBbox);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, geometryPolygon, bbox, distanceFromReference);
+        return Objects.hash(id, geometryPolygon, bbox, distanceFromReference, convertedBbox);
+    }
+
+    @Override
+    public String toString() {
+        return "SimplifiedParcelle{" +
+                "id='" + id + '\'' +
+                ", distanceFromReference=" + distanceFromReference +
+                '}';
     }
 }

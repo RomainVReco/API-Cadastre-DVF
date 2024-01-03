@@ -17,4 +17,11 @@ public class ParcelleAPI extends AbstractRequestAPI{
         this.conn = this.getRequestResult(this.URL);
     }
 
+    public ParcelleAPI(String cityCode, String section, int number) throws IOException, URISyntaxException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("code_insee=").append(cityCode).append("&").append("section=").append(section);
+        URL = new URI(URL_API+sb).toURL();
+        this.conn = this.getRequestResult(this.URL);
+    }
+
 }

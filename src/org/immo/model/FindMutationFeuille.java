@@ -26,7 +26,7 @@ public class FindMutationFeuille extends FindMutation {
     Geomutation geomutation;
     GestionUser gestionUser = new GestionUser();
 
-    public FindMutationFeuille(String query) {
+    public FindMutationFeuille() {
         try {
             getAdressFromQuery();
         } catch (IOException | URISyntaxException e) {
