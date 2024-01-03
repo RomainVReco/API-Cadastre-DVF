@@ -7,7 +7,6 @@ import java.net.URL;
 
 public class MutationAPI extends AbstractRequestAPI {
     final String URL_API = "https://apidf-preprod.cerema.fr/dvf_opendata/mutations/";
-    URL URL;
 
     public MutationAPI (int idMutation) throws IOException, URISyntaxException {
         URL = new URI((URL_API+idMutation)).toURL();

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.*;
 
 public class NextPageAPI extends AbstractRequestAPI {
-    URL URL;
 
     public NextPageAPI (String nextPageURL) {
         String httpsNextPageURL = transformToHTTPS(nextPageURL);
