@@ -1,5 +1,6 @@
 package TestJackson;
 
+import org.immo.exceptions.NoParcelleException;
 import org.immo.geojson.geomutation.FeatureMutation;
 import org.immo.model.FindMutationFeuille;
 import org.immo.model.FindMutationParcelle;
@@ -35,7 +36,7 @@ public class MainJackson {
 
         try {
             FindMutationParcelle findMutationParcelle = new FindMutationParcelle();
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException | NoParcelleException e) {
             throw new RuntimeException(e);
         }
     }
