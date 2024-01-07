@@ -19,6 +19,7 @@ public class MainJackson {
 //        FindMutationFeuille fm = new FindMutationFeuille();
 //        System.out.println(fm.getSetOfGeomutations().size());
 //
+        
 //        System.out.println("Je lance le stream\n");
 //        Stream<FeatureMutation> fmit = fm.getSetOfGeomutations().stream();
 //        List<FeatureMutation> listOfFiltered = fmit
