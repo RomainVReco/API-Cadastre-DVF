@@ -118,8 +118,8 @@ public abstract class FindMutation {
             simplifiedParcelleList.add(subparcelle);
         }
         Collections.sort(simplifiedParcelleList, new OrderByDistanceReference());
-        System.out.println(simplifiedParcelleList.getFirst().toString());
-        return simplifiedParcelleList.getFirst().getConvertedBbox();
+        System.out.println(simplifiedParcelleList.get(0).toString());
+        return simplifiedParcelleList.get(0).getConvertedBbox();
 
 
 
