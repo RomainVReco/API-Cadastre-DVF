@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,6 +24,15 @@ class ParcelleTest {
         String bboxAvMaine = parcelle.convertBboxToString();
         System.out.println(bboxAvMaine);
         assertEquals("2.32476735,48.83012991,2.32562559,48.83054392", bboxAvMaine);
-
     }
+
+    @Test
+    void getYear() {
+        LocalDateTime dateForYear = LocalDateTime.now();
+        int year = dateForYear.getYear();
+        assertEquals(2024, year);
+        assertEquals(2022, year-2);
+    }
+
+
 }

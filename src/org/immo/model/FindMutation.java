@@ -120,9 +120,6 @@ public abstract class FindMutation {
         Collections.sort(simplifiedParcelleList, new OrderByDistanceReference());
         System.out.println(simplifiedParcelleList.getFirst().toString());
         return simplifiedParcelleList.getFirst().getConvertedBbox();
-
-
-
     }
 
     private List<Double> extractLatitudeLongitude(String geometryPoint) {

@@ -37,7 +37,8 @@ public class FindMutationParcelle extends FindMutation {
     private String getCodeInseeFromPostCode(String postCode) throws URISyntaxException, IOException {
         callAPI = new CommuneAPI(postCode);
         String jsonResponse = callAPI.readReponseFromAPI(callAPI.getConn());
-        return jsonResponse.substring(38,43);
+        System.out.println(jsonResponse);
+        return jsonResponse.substring(39,44);
     }
 
     private String getCityCodeFromAdress(FeatureAdresseBAN adressToLook) {
