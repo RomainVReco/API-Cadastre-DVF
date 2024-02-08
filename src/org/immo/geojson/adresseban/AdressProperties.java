@@ -22,6 +22,9 @@ public class AdressProperties {
         private String postcode;
         @JsonProperty("citycode")
         private String citycode;
+
+        @JsonProperty("locality")
+        private String locality;
         @JsonProperty("oldcitycode")
         private String oldcitycode;
         @JsonProperty("x")

@@ -1,14 +1,18 @@
 package org.immo.model;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.immo.exceptions.NoParcelleException;
 import org.immo.geojson.adresseban.AdresseBAN;
 import org.immo.geojson.adresseban.FeatureAdresseBAN;
 import org.immo.geojson.commune.Commune;
+import org.immo.geojson.commune.Communes;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.servicepublicapi.CommuneAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,14 +41,33 @@ public class FindMutationParcelle extends FindMutation {
     }
 
     private String getCodeInseeFromPostCode(String postCode) throws URISyntaxException, IOException {
-//        ResponseManagerHTTP<List<Commune>> responseManagerHTTPCommune =  new ResponseManagerHTTP<>();
+        ResponseManagerHTTP<Commune[]> responseManagerHTTPCommune =  new ResponseManagerHTTP<>();
         callAPI = new CommuneAPI(postCode);
-//        Optional<List<Commune>> commune = responseManagerHTTPCommune.getAPIReturn(callAPI, List.class);
-        String jsonResponse = callAPI.readReponseFromAPI(callAPI.getConn());
-        int indexOfCode = jsonResponse.indexOf("code");
-        System.out.println(jsonResponse);
-        System.out.println(jsonResponse.substring(indexOfCode+7,43));
-        return jsonResponse.substring(indexOfCode+7,43);
+        Optional<Commune[]> optionalCommunes = responseManagerHTTPCommune.getAPIReturn(callAPI, Commune[].class);
+        Commune[] communes = optionalCommunes.get();
+        if (communes.length>1) {
+            for (int i = 0; i < communes.length; i++) {
+                System.out.println("[" + (i + 1) + "] " + communes[i].getNom() + " : " + communes[i].getCode() + "");
+            }
+            int positionCodeInsee = Integer.parseInt(gestionUser.promptSingleDigit("Votre choix : ", communes.length));
+            return communes[positionCodeInsee - 1].getCode();
+        } else return communes[0].getCode();
+
+
+
+//        if (optionalCommunes.isPresent() && optionalCommunes.get().getListCommunes().size()>=1) {
+//           Communes communes = optionalCommunes.get();
+//           communes.setCommuneHashMap();
+//           communes.allowCommuneChoice();
+//           System.out.println(" ");
+//           int positionCodeInsee = Integer.parseInt(gestionUser.promptSingleDigit("Choisissez la commune : ", communes.getListCommunes().size()));
+//           return communes.getCommuneHashMap().get(positionCodeInsee).getCode();
+//        } else return "00000";
+//        String jsonResponse = callAPI.readReponseFromAPI(callAPI.getConn());
+//        int indexOfCode = jsonResponse.indexOf("code");
+//        System.out.println(jsonResponse);
+//        System.out.println(jsonResponse.substring(indexOfCode+7,43));
+//        return jsonResponse.substring(indexOfCode+7,43);
     }
 
     private String getCityCodeFromAdress(FeatureAdresseBAN adressToLook) {
