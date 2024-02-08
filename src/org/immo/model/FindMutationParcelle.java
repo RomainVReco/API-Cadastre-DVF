@@ -3,11 +3,13 @@ package org.immo.model;
 import org.immo.exceptions.NoParcelleException;
 import org.immo.geojson.adresseban.AdresseBAN;
 import org.immo.geojson.adresseban.FeatureAdresseBAN;
+import org.immo.geojson.commune.Commune;
 import org.immo.geojson.parcelle.Parcelle;
 import org.immo.servicepublicapi.CommuneAPI;
 import org.immo.servicepublicapi.ParcelleAPI;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 public class FindMutationParcelle extends FindMutation {
@@ -35,10 +37,14 @@ public class FindMutationParcelle extends FindMutation {
     }
 
     private String getCodeInseeFromPostCode(String postCode) throws URISyntaxException, IOException {
+//        ResponseManagerHTTP<List<Commune>> responseManagerHTTPCommune =  new ResponseManagerHTTP<>();
         callAPI = new CommuneAPI(postCode);
+//        Optional<List<Commune>> commune = responseManagerHTTPCommune.getAPIReturn(callAPI, List.class);
         String jsonResponse = callAPI.readReponseFromAPI(callAPI.getConn());
+        int indexOfCode = jsonResponse.indexOf("code");
         System.out.println(jsonResponse);
-        return jsonResponse.substring(39,44);
+        System.out.println(jsonResponse.substring(indexOfCode+7,43));
+        return jsonResponse.substring(indexOfCode+7,43);
     }
 
     private String getCityCodeFromAdress(FeatureAdresseBAN adressToLook) {
