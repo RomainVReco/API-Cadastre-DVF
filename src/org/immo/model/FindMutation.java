@@ -24,7 +24,7 @@ public abstract class FindMutation {
     protected final String EMPTY_RETURN = "No object in POJO";
     protected Set<FeatureMutation> setOfGeomutations = new HashSet<>();
     Geomutation geomutation;
-    GestionUser gestionUser = new GestionUser();
+    GestionUser gestionUser = GestionUser.getInstance();
 
 
     public AdresseBAN getAdressFromQuery() throws IOException, URISyntaxException {

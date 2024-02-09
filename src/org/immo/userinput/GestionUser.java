@@ -1,5 +1,6 @@
 package org.immo.userinput;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,19 +12,32 @@ public class GestionUser {
 
     Pattern p = Pattern.compile("[0-9]+[0-9]+[0-9]+[0-9]");
     Matcher m;
+    private static GestionUser instance = null;
+    Scanner scanner = new Scanner(System.in);
+    private GestionUser() {
+    }
 
-    public GestionUser() {
+    public static GestionUser getInstance() {
+        if (instance == null){
+            instance = new GestionUser();
+        }
+        return instance;
     }
 
     public String promptString(String prompt) {
         System.out.print(prompt+" : ");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+        String input = "";
+        try {
+            input = scanner.nextLine();
+        } catch (NoSuchElementException e){
+            System.out.println("Oups, pas d'entrée !");
+            input = "31 avenue du Bas Meudon";
+        }
+
         return input;
     }
 
     public String promptYear() {
-        Scanner scanner = new Scanner(System.in);
         String userInput = "";
         boolean validInput = false;
         do {
@@ -41,7 +55,6 @@ public class GestionUser {
     }
 
     public String promptSingleDigit(String prompt, int listSize) {
-        Scanner scanner = new Scanner(System.in);
         String userInput = "";
         boolean validInput = false;
         do {
@@ -65,7 +78,6 @@ public class GestionUser {
     }
 
     public String promptYesNo(String prompt) {
-        Scanner scanner = new Scanner(System.in);
         String userInput = "";
         boolean validInput = false;
         do {

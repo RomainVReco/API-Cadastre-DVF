@@ -7,13 +7,15 @@ import org.immo.userinput.GestionUser;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import static java.lang.System.exit;
+
 
 public class Main {
 
     public static void main(String[] args) {
 
         boolean goingOn = true;
-        GestionUser userInput = new GestionUser();
+        GestionUser userInput = GestionUser.getInstance();
         String answer = "";
 
         while (goingOn) {
@@ -25,7 +27,7 @@ public class Main {
             }
 
             answer = userInput.promptYesNo("Voulez-vous continuer ? ");
-            if (answer.equals('N')) {
+            if (answer.equals("N")) {
                 goingOn = false;
             } else System.out.println(" ");
         }
