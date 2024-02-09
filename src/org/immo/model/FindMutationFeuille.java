@@ -24,7 +24,7 @@ public class FindMutationFeuille extends FindMutation {
     private final String EMPTY_RETURN = "No object in POJO";
     private Set<FeatureMutation> setOfGeomutations = new HashSet<>();
     Geomutation geomutation;
-    GestionUser gestionUser = new GestionUser();
+    GestionUser gestionUser = GestionUser.getInstance();
 
     public FindMutationFeuille() {
         try {
