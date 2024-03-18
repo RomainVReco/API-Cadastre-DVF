@@ -132,17 +132,5 @@ public abstract class AbstractProperties {
         this.bbox = bbox;
     }
 
-    public String convertBboxToString(){
-        StringBuilder bbox = new StringBuilder();
-        try {
-            for (Double point: this.getBbox()) {
-                bbox.append(point).append(",");
-            }
-        } catch (NullPointerException e){
-            System.out.println("Pas de résultat pour la conversion de la Bbox en String");
-            bbox.append("empty");
-        }
 
-        return bbox.substring(0, bbox.length()-1);
-    }
 }

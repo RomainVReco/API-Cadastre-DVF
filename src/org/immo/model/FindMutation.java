@@ -100,12 +100,13 @@ public abstract class FindMutation {
         List<Double> longLat = new ArrayList<>();
         longLat = extractLatitudeLongitude(geometryPoint);
         List<SimplifiedParcelle> simplifiedParcelleList = new ArrayList<>();
-        for (FeatureParcelle featureTerrain : parcelleToReview.getFeaturesTerrain()) {
+        List<FeatureParcelle> parcellesToScan = parcelleToReview.getFeaturesTerrain();
+        for (FeatureParcelle featureTerrain : parcellesToScan) {
             SimplifiedParcelle subparcelle = new SimplifiedParcelle();
-            subparcelle.setBbox(featureTerrain.getTerrainProperties().getBbox());
+            subparcelle.setBbox(featureTerrain.getBbox());
             subparcelle.setGeometryPolygon(featureTerrain.getGeometry());
             subparcelle.setId(featureTerrain.getTerrainProperties().getIdu());
-            subparcelle.setConvertedBbox(featureTerrain.getTerrainProperties().convertBboxToString());
+            subparcelle.setConvertedBbox(featureTerrain.convertBboxToString());
             // racine((xb-xa)²+(yb-ya)²)
             double distanceMinEucliX = Math.pow(subparcelle.getBbox().get(0)-longLat.get(0),2);
             double distanceMinEucliY = Math.pow(subparcelle.getBbox().get(1)-longLat.get(1),2);

@@ -17,6 +17,9 @@ public abstract class AbstractFeatures<T> {
     @JsonProperty("bbox")
     private List<Double> bbox ;
 
+    public List<Double> getBbox() {
+        return bbox;
+    }
 
     public String getType() {
         return type;
@@ -56,5 +59,23 @@ public abstract class AbstractFeatures<T> {
 
     public void setParcelleProperties(T parcelleProperties) {
         this.terrainProperties = parcelleProperties;
+    }
+
+    /**
+     * Ajout suite modification API Cadastre le 18/03/2024
+     * @return
+     */
+    public String convertBboxToString(){
+        StringBuilder bbox = new StringBuilder();
+        try {
+            for (Double point: this.getBbox()) {
+                bbox.append(point).append(",");
+            }
+        } catch (NullPointerException e){
+            System.out.println("Pas de résultat pour la conversion de la Bbox en String");
+            bbox.append("empty");
+        }
+
+        return bbox.substring(0, bbox.length()-1);
     }
 }
